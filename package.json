@@ -8,7 +8,12 @@
     "start": "node --experimental-specifier-resolution=node server/index.js",
     "server": "nodemon --experimental-specifier-resolution=node server/index.js",
     "client": "npm start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\" --names \"SERVER,CLIENT\" --prefix-colors \"blue,yellow\""
+    "dev": "concurrently \"npm run server\" \"npm run client\" --names \"SERVER,CLIENT\" --prefix-colors \"blue,yellow\"",
+    "install-client": "cd client && npm install",
+    "install-backend": "npm install",
+    "install-app": "npm run install-backend && npm run install-client",
+    "build-client": "cd client && npm run build",
+    "render-deploy": "npm run install-app && npm run build-client"
   },
   "author": "",
   "license": "ISC",
