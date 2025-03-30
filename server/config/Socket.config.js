@@ -1,15 +1,20 @@
-import { server } from '../index.js';
 import { Server } from 'socket.io';
-
-// Initialize Socket.io with the server
-const io = new Server(server, {
-    cors: {
-        origin: '*',
-        methods: ['GET', 'POST']
-    }
-});
-
+import { timelog } from '../utils/LoggingUtils.js';
 // Socket.io connection handler
-io.on('connection', (socket) => {
-    console.log('New client connected:', socket.id);
-});
+
+export const setupSocketHandlers = (server) => {
+    const io = new Server(server, {
+        cors: {
+            origin: '*',
+            methods: ['GET', 'POST']
+        }
+    });
+
+    io.on('connection', (socket) => {
+        timelog(`New client connected: ${socket.id}`);
+
+        socket.on('disconnect', () => {
+            timelog(`Client disconnected: ${socket.id}`);
+        });
+    });
+}
