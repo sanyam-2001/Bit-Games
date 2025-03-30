@@ -1,15 +1,22 @@
-import { server } from '../index.js';
 import { Server } from 'socket.io';
-
-// Initialize Socket.io with the server
-const io = new Server(server, {
-    cors: {
-        origin: '*',
-        methods: ['GET', 'POST']
-    }
-});
-
 // Socket.io connection handler
-io.on('connection', (socket) => {
-    console.log('New client connected:', socket.id);
-});
+export const setupSocketHandlers = (server) => {
+    const io = new Server(server, {
+        cors: {
+            origin: '*',
+            methods: ['GET', 'POST']
+        }
+    });
+
+    io.on('connection', (socket) => {
+        console.log('New client connected:', socket.id, new Date().toLocaleString('en-GB', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false
+        }));
+    });
+}
