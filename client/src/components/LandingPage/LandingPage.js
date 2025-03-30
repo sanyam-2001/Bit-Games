@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import Button from '../ui/Button';
+import { useNavigator } from '../../utils/navigator';
 import './LandingPage.css';
 import ParticleBackground from '../ParticleBackground/ParticleBackground';
 
 const LandingPage = () => {
     const [isParticleActive, setIsParticleActive] = useState(false);
+    const navigate = useNavigator();
 
     // Enable particle interaction when page is clicked
     useEffect(() => {
@@ -25,6 +28,11 @@ const LandingPage = () => {
             document.removeEventListener('touchstart', handleClick);
         };
     }, [isParticleActive]);
+
+    // Handler function for navigation
+    const handlePlayNow = () => {
+        navigate('/login');
+    };
 
     return (
         <div className="landing-container">
@@ -64,7 +72,7 @@ const LandingPage = () => {
                     Experience real-time multiplayer gaming like never before.
                     Join thousands of players in our neon-fueled digital arena.
                 </p>
-                <button className="cta-button">PLAY NOW</button>
+                <button className="cta-button" onClick={handlePlayNow}>PLAY NOW</button>
             </section>
 
             {/* Features Section */}

@@ -1,12 +1,32 @@
 import React from 'react';
 import LandingPage from './components/LandingPage/LandingPage';
 import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { ThemeProvider } from 'styled-components';
+import { SocketProvider } from './context/SocketContext';
+import Home from './pages/Home';
+import theme from './styles/theme';
+import GlobalStyles from './styles/GlobalStyles';
 
 function App() {
     return (
-        <div className="App">
-            <LandingPage />
-        </div>
+        <ThemeProvider theme={theme}>
+            <GlobalStyles />
+            <Router>
+                <SocketProvider>
+                    <Routes>
+                        <Route path='/' element={
+                            <div className="App">
+                                <LandingPage />
+                            </div>
+                        }/>
+                        <Route path="/login" element={
+                            <Home />
+                        } />
+                    </Routes>
+                </SocketProvider>
+            </Router>
+        </ThemeProvider>
     );
 }
 
