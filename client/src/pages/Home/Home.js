@@ -1,105 +1,157 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
-import { motion } from 'framer-motion';
-import { Container, Card, PageContainer, Input, InputGroup, ErrorText, Button } from '../../components/ui/index';
+import { Card, FlexContainer } from '../../components/ui/Container/Container';
+import Input, { InputGroup } from '../../components/ui/Input/Input';
+import Button from '../../components/ui/Button/Button';
+import styles from './Home.module.css';
+import PrimaryButton from '../../components/ui/PrimaryButton/PrimaryButton';
 
 const Home = () => {
-    const [username, setUsername] = useState('');
-    const [usernameError, setUsernameError] = useState('');
+    const [isFlipped, setIsFlipped] = useState(false);
+    const [loginData, setLoginData] = useState({ name: '', roomId: '' });
+    const [createRoomData, setCreateRoomData] = useState({ name: '', roomName: '' });
+    const [isAnimating, setIsAnimating] = useState(false);
 
-    const validateUsername = () => {
-        if (!username.trim()) {
-            setUsernameError('Username is required');
-            return false;
+    // Handle card flip with animation lock
+    const handleFlip = (flipState) => {
+        if (!isAnimating) {
+            setIsAnimating(true);
+            setIsFlipped(flipState);
+            setTimeout(() => {
+                setIsAnimating(false);
+            }, 800); // Match this with the CSS transition duration
         }
-        setUsernameError('');
-        return true;
     };
 
-    const handleSubmit = (e) => {
+    const handleLoginChange = (e) => {
+        setLoginData({
+            ...loginData,
+            [e.target.name]: e.target.value
+        });
+    };
+
+    const handleCreateRoomChange = (e) => {
+        setCreateRoomData({
+            ...createRoomData,
+            [e.target.name]: e.target.value
+        });
+    };
+
+    const handleJoinRoom = (e) => {
         e.preventDefault();
+        console.log('Join Room:', loginData);
+        // Add join room logic here
+    };
 
-        if (!validateUsername()) return;
-
-        console.log('Username submitted:', username);
+    const handleCreateRoom = (e) => {
+        e.preventDefault();
+        console.log('Create Room:', createRoomData);
+        // Add create room logic here
     };
 
     return (
-        <PageContainer>
-            <Container maxWidth="500px">
-                <HeaderContainer
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                >
-                    <Logo>BitGames</Logo>
-                    <Tagline>Connect. Play. Compete.</Tagline>
-                </HeaderContainer>
-
-                <Card as={motion.div}
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                >
-                    <form onSubmit={handleSubmit}>
-                        <InputGroup>
-                            <label htmlFor="username">Username</label>
-                            <Input
-                                id="username"
-                                type="text"
-                                placeholder="Enter your username"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                                variant="primary"
-                            />
-                            {usernameError && <ErrorText>{usernameError}</ErrorText>}
-                        </InputGroup>
-
-                        <Button type="submit" fullWidth variant="primary">
-                            Continue
-                        </Button>
-                    </form>
-                </Card>
-
-                <FooterText
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 0.7 }}
-                    transition={{ duration: 0.5, delay: 0.4 }}
-                >
-                    Enter your username to start playing!
-                </FooterText>
-            </Container>
-        </PageContainer>
+        <FlexContainer
+            direction="column"
+            align="center"
+            justify="center"
+            style={{
+                minHeight: '100vh',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+            }}
+        >
+            <div className={styles.flippableCard}>
+                <div className={`${styles.cardInner} ${isFlipped ? styles.flipped : styles.notFlipped}`}>
+                    <div className={`${styles.cardSide} ${styles.cardFront}`}>
+                        <Card className={styles.styledCard}>
+                            <div className={styles.gridBackground}></div>
+                            <div className={styles.scanLines}></div>
+                            <div></div> {/* This is for the pixelated border effect */}
+                            <h2 className={styles.cardTitle}>Join a Room</h2>
+                            <form onSubmit={handleJoinRoom}>
+                                <InputGroup label="Name">
+                                    <Input
+                                        type="text"
+                                        name="name"
+                                        placeholder="Enter your name"
+                                        value={loginData.name}
+                                        onChange={handleLoginChange}
+                                        variant="primary"
+                                        required
+                                    />
+                                </InputGroup>
+                                <InputGroup label="Room ID">
+                                    <Input
+                                        type="text"
+                                        name="roomId"
+                                        placeholder="Enter room ID"
+                                        value={loginData.roomId}
+                                        onChange={handleLoginChange}
+                                        variant="primary"
+                                        required
+                                    />
+                                </InputGroup>
+                                <FlexContainer direction="column" className={styles.buttonsContainer} align="center">
+                                    <PrimaryButton type="submit" variant="primary">Join Room</PrimaryButton>
+                                    <PrimaryButton
+                                        type="button"
+                                        variant="secondary"
+                                        onClick={() => handleFlip(true)}
+                                        disabled={isAnimating}
+                                    >
+                                        Create New Room
+                                    </PrimaryButton>
+                                </FlexContainer>
+                            </form>
+                        </Card>
+                    </div>
+                    <div className={`${styles.cardSide} ${styles.cardBack}`}>
+                        <Card className={styles.styledCard}>
+                            <div className={styles.gridBackground}></div>
+                            <div className={styles.scanLines}></div>
+                            <div></div> {/* This is for the pixelated border effect */}
+                            <h2 className={styles.cardTitle}>Create a Room</h2>
+                            <form onSubmit={handleCreateRoom}>
+                                <InputGroup label="Name">
+                                    <Input
+                                        type="text"
+                                        name="name"
+                                        placeholder="Enter your name"
+                                        value={createRoomData.name}
+                                        onChange={handleCreateRoomChange}
+                                        variant="primary"
+                                        required
+                                    />
+                                </InputGroup>
+                                <InputGroup label="Room Name">
+                                    <Input
+                                        type="text"
+                                        name="roomName"
+                                        placeholder="Enter room name"
+                                        value={createRoomData.roomName}
+                                        onChange={handleCreateRoomChange}
+                                        variant="primary"
+                                        required
+                                    />
+                                </InputGroup>
+                                <FlexContainer direction="column" className={styles.buttonsContainer} align="center">
+                                    <PrimaryButton type="submit" variant="primary">Create Room</PrimaryButton>
+                                    <PrimaryButton
+                                        type="button"
+                                        variant="secondary"
+                                        onClick={() => handleFlip(false)}
+                                        disabled={isAnimating}
+                                    >
+                                        Join Existing Room
+                                    </PrimaryButton>
+                                </FlexContainer>
+                            </form>
+                        </Card>
+                    </div>
+                </div>
+            </div>
+        </FlexContainer>
     );
 };
-
-// Styled components
-const HeaderContainer = styled(motion.div)`
-  text-align: center;
-  margin-bottom: ${({ theme }) => theme.spacing.xl};
-`;
-
-const Logo = styled.h1`
-  font-family: ${({ theme }) => theme.fonts.mono};
-  font-size: 3rem;
-  margin-bottom: ${({ theme }) => theme.spacing.xs};
-  color: ${({ theme }) => theme.colors.neonBlue};
-  text-shadow: ${({ theme }) => theme.colors.shadowBlue};
-  letter-spacing: 2px;
-`;
-
-const Tagline = styled.p`
-  color: ${({ theme }) => theme.colors.neonPink};
-  font-size: 1.2rem;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-`;
-
-const FooterText = styled(motion.p)`
-  text-align: center;
-  margin-top: ${({ theme }) => theme.spacing.xl};
-  color: ${({ theme }) => theme.colors.textSecondary};
-  font-size: 0.9rem;
-`;
 
 export default Home; 

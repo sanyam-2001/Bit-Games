@@ -3,7 +3,7 @@ import { Button } from '../ui';
 import { useNavigator } from '../../utils/navigator';
 import './LandingPage.css';
 import ParticleBackground from '../ParticleBackground/ParticleBackground';
-
+import PrimaryButton from '../ui/PrimaryButton/PrimaryButton';
 const LandingPage = () => {
     const [isParticleActive, setIsParticleActive] = useState(false);
     const navigate = useNavigator();
@@ -94,13 +94,7 @@ const LandingPage = () => {
                     Experience real-time multiplayer gaming like never before.
                     Join thousands of players in our neon-fueled digital arena.
                 </p>
-                <Button
-                    variant="primary"
-                    size="large"
-                    onClick={handlePlayNow}
-                >
-                    PLAY NOW
-                </Button>
+                <PrimaryButton onClick={handlePlayNow}>PLAY NOW</PrimaryButton>
             </section>
 
             {/* Features Section */}
