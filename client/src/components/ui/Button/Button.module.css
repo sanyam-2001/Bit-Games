@@ -1,0 +1,87 @@
+/* Base button styles */
+.button {
+  font-family: var(--font-mono, monospace);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  outline: none;
+}
+
+/* Button variants */
+.variant_primary {
+  background-color: transparent;
+  color: var(--neon-blue, #00f3ff);
+  border: 2px solid var(--neon-blue, #00f3ff);
+  box-shadow: 0 0 10px rgba(0, 243, 255, 0.4);
+}
+
+.variant_primary:hover,
+.variant_primary:focus {
+  background-color: rgba(8, 247, 254, 0.1);
+}
+
+.variant_primary:active {
+  background-color: rgba(8, 247, 254, 0.2);
+}
+
+.variant_secondary {
+  background-color: transparent;
+  color: var(--neon-pink, #ff00ff);
+  border: 2px solid var(--neon-pink, #ff00ff);
+  box-shadow: 0 0 10px rgba(255, 0, 255, 0.4);
+}
+
+.variant_secondary:hover,
+.variant_secondary:focus {
+  background-color: rgba(254, 83, 187, 0.1);
+}
+
+.variant_secondary:active {
+  background-color: rgba(254, 83, 187, 0.2);
+}
+
+.variant_outlined {
+  background-color: transparent;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.variant_outlined:hover,
+.variant_outlined:focus {
+  border-color: var(--neon-blue, #00f3ff);
+  color: var(--neon-blue, #00f3ff);
+}
+
+/* Button sizes */
+.size_small {
+  font-size: 0.85rem;
+  padding: 6px 12px;
+}
+
+.size_medium {
+  font-size: 1rem;
+  padding: 10px 20px;
+}
+
+.size_large {
+  font-size: 1.1rem;
+  padding: 14px 28px;
+}
+
+/* Full width */
+.fullWidth {
+  width: 100%;
+}
+
+/* Disabled state */
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+}

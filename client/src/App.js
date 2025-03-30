@@ -4,7 +4,7 @@ import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { SocketProvider } from './context/SocketContext';
-import Home from './pages/Home';
+import Home from './pages/Home/Home';
 import theme from './styles/theme';
 import GlobalStyles from './styles/GlobalStyles';
 
@@ -19,8 +19,8 @@ function App() {
                             <div className="App">
                                 <LandingPage />
                             </div>
-                        }/>
-                        <Route path="/login" element={
+                        } />
+                        <Route path="/home" element={
                             <Home />
                         } />
                     </Routes>

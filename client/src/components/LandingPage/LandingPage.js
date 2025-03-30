@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Button from '../ui/Button';
+import { Button } from '../ui';
 import { useNavigator } from '../../utils/navigator';
 import './LandingPage.css';
 import ParticleBackground from '../ParticleBackground/ParticleBackground';
@@ -7,6 +7,28 @@ import ParticleBackground from '../ParticleBackground/ParticleBackground';
 const LandingPage = () => {
     const [isParticleActive, setIsParticleActive] = useState(false);
     const navigate = useNavigator();
+
+    // Feature cards data
+    const featureCards = [
+        {
+            id: 0,
+            icon: '🎮',
+            title: 'Retro Classics',
+            description: 'Dive into our collection of carefully preserved retro games from the 80s and 90s.'
+        },
+        {
+            id: 1,
+            icon: '🕹️',
+            title: 'Modern Pixels',
+            description: 'Experience new indie games created with classic pixel art aesthetics.'
+        },
+        {
+            id: 2,
+            icon: '🏆',
+            title: 'Tournaments',
+            description: 'Compete in retro gaming tournaments and climb the global leaderboards.'
+        }
+    ];
 
     // Enable particle interaction when page is clicked
     useEffect(() => {
@@ -31,7 +53,7 @@ const LandingPage = () => {
 
     // Handler function for navigation
     const handlePlayNow = () => {
-        navigate('/login');
+        navigate('/home');
     };
 
     return (
@@ -72,35 +94,27 @@ const LandingPage = () => {
                     Experience real-time multiplayer gaming like never before.
                     Join thousands of players in our neon-fueled digital arena.
                 </p>
-                <button className="cta-button" onClick={handlePlayNow}>PLAY NOW</button>
+                <Button
+                    variant="primary"
+                    size="large"
+                    onClick={handlePlayNow}
+                >
+                    PLAY NOW
+                </Button>
             </section>
 
             {/* Features Section */}
             <section className="features-section" id="features">
-                <div className="feature-card" data-animation-delay="0">
-                    <div className="light-spot"></div>
-                    <div className="feature-icon">🎮</div>
-                    <h3 className="feature-title">Retro Classics</h3>
-                    <p className="feature-desc">
-                        Dive into our collection of carefully preserved retro games from the 80s and 90s.
-                    </p>
-                </div>
-                <div className="feature-card" data-animation-delay="1">
-                    <div className="light-spot"></div>
-                    <div className="feature-icon">🕹️</div>
-                    <h3 className="feature-title">Modern Pixels</h3>
-                    <p className="feature-desc">
-                        Experience new indie games created with classic pixel art aesthetics.
-                    </p>
-                </div>
-                <div className="feature-card" data-animation-delay="2">
-                    <div className="light-spot"></div>
-                    <div className="feature-icon">🏆</div>
-                    <h3 className="feature-title">Tournaments</h3>
-                    <p className="feature-desc">
-                        Compete in retro gaming tournaments and climb the global leaderboards.
-                    </p>
-                </div>
+                {featureCards.map((card) => (
+                    <div className="feature-card" data-animation-delay={card.id} key={card.id}>
+                        <div className="light-spot"></div>
+                        <div className="feature-icon">{card.icon}</div>
+                        <h3 className="feature-title">{card.title}</h3>
+                        <p className="feature-desc">
+                            {card.description}
+                        </p>
+                    </div>
+                ))}
             </section>
         </div>
     );
