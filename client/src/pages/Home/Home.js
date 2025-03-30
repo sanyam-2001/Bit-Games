@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Card, FlexContainer } from '../../components/ui/Container/Container';
 import Input, { InputGroup } from '../../components/ui/Input/Input';
 import Button from '../../components/ui/Button/Button';
 import styles from './Home.module.css';
+import PrimaryButton from '../../components/ui/PrimaryButton/PrimaryButton';
 
 const Home = () => {
     const [isFlipped, setIsFlipped] = useState(false);
@@ -90,17 +91,16 @@ const Home = () => {
                                         required
                                     />
                                 </InputGroup>
-                                <FlexContainer direction="column" className={styles.buttonsContainer}>
-                                    <Button type="submit" variant="primary" fullWidth>Join Room</Button>
-                                    <Button
+                                <FlexContainer direction="column" className={styles.buttonsContainer} align="center">
+                                    <PrimaryButton type="submit" variant="primary">Join Room</PrimaryButton>
+                                    <PrimaryButton
                                         type="button"
                                         variant="secondary"
-                                        fullWidth
                                         onClick={() => handleFlip(true)}
                                         disabled={isAnimating}
                                     >
                                         Create New Room
-                                    </Button>
+                                    </PrimaryButton>
                                 </FlexContainer>
                             </form>
                         </Card>
@@ -134,17 +134,16 @@ const Home = () => {
                                         required
                                     />
                                 </InputGroup>
-                                <FlexContainer direction="column" className={styles.buttonsContainer}>
-                                    <Button type="submit" variant="primary" fullWidth>Create Room</Button>
-                                    <Button
+                                <FlexContainer direction="column" className={styles.buttonsContainer} align="center">
+                                    <PrimaryButton type="submit" variant="primary">Create Room</PrimaryButton>
+                                    <PrimaryButton
                                         type="button"
                                         variant="secondary"
-                                        fullWidth
                                         onClick={() => handleFlip(false)}
                                         disabled={isAnimating}
                                     >
                                         Join Existing Room
-                                    </Button>
+                                    </PrimaryButton>
                                 </FlexContainer>
                             </form>
                         </Card>

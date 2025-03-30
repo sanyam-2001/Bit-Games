@@ -142,10 +142,18 @@
 
 .buttonsContainer {
   margin-top: auto;
-  gap: 24px;
+  gap: 32px;
   z-index: 2;
   position: relative;
   padding-top: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.buttonsContainer > button {
+  margin: 10px auto;
+  width: 90% !important;
+  align-self: center;
 }
 
 /* Grid background effect */
