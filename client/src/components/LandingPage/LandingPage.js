@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Button } from '../ui';
 import { useNavigator } from '../../utils/navigator';
 import './LandingPage.css';
 import ParticleBackground from '../ParticleBackground/ParticleBackground';
