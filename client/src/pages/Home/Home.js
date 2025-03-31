@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Card, FlexContainer } from '../../components/ui/Container/Container';
 import Input, { InputGroup } from '../../components/ui/Input/Input';
-import Button from '../../components/ui/Button/Button';
 import styles from './Home.module.css';
 import PrimaryButton from '../../components/ui/PrimaryButton/PrimaryButton';
 import SecondaryButton from '../../components/ui/SecondaryButton/SecondaryButton';

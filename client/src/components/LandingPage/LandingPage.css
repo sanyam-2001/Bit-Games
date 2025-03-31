@@ -26,29 +26,10 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-image: linear-gradient(
-      0deg,
-      transparent 24%,
-      var(--grid-color) 25%,
-      var(--grid-color) 26%,
-      transparent 27%,
-      transparent 74%,
-      var(--grid-color) 75%,
-      var(--grid-color) 76%,
-      transparent 77%
-    ),
-    linear-gradient(
-      90deg,
-      transparent 24%,
-      var(--grid-color) 25%,
-      var(--grid-color) 26%,
-      transparent 27%,
-      transparent 74%,
-      var(--grid-color) 75%,
-      var(--grid-color) 76%,
-      transparent 77%
-    );
+
   background-size: 50px 50px;
+  background-position: center;
+  background-repeat: repeat;
 }
 
 .header {
@@ -441,7 +422,7 @@ body {
 .neon-stream {
   position: absolute;
   height: 100%;
-  width: 6px;
+  width: 3px;
   z-index: 0;
   overflow: hidden;
 }
@@ -459,36 +440,49 @@ body {
   top: 0;
   left: 0;
   width: 100%;
-  height: 300%; /* Longer to ensure seamless loop */
+  height: 300%;
   background: linear-gradient(
     to bottom,
     var(--neon-blue) 0%,
     rgba(0, 243, 255, 0.9) 5%,
-    #ffffff 10%,
-    var(--neon-pink) 15%,
-    rgba(255, 0, 255, 0.9) 20%,
-    #ffffff 25%,
-    var(--neon-blue) 30%,
-    rgba(0, 243, 255, 0.9) 35%,
-    #ffffff 40%,
-    var(--neon-pink) 45%,
-    rgba(255, 0, 255, 0.9) 50%,
-    #ffffff 55%,
+    var(--neon-pink) 10%,
+    rgba(255, 0, 255, 0.9) 15%,
+    var(--neon-blue) 20%,
+    rgba(0, 243, 255, 0.9) 25%,
+    var(--neon-pink) 30%,
+    rgba(255, 0, 255, 0.9) 35%,
+    var(--neon-blue) 40%,
+    rgba(0, 243, 255, 0.9) 45%,
+    var(--neon-pink) 50%,
+    rgba(255, 0, 255, 0.9) 55%,
     var(--neon-blue) 60%,
     rgba(0, 243, 255, 0.9) 65%,
-    #ffffff 70%,
-    var(--neon-pink) 75%,
-    rgba(255, 0, 255, 0.9) 80%,
-    #ffffff 85%,
-    var(--neon-blue) 90%,
-    var(--neon-pink) 95%,
-    var(--neon-blue) 100%
+    var(--neon-pink) 70%,
+    rgba(255, 0, 255, 0.9) 75%,
+    var(--neon-blue) 80%,
+    rgba(0, 243, 255, 0.9) 85%,
+    var(--neon-pink) 90%,
+    var(--neon-blue) 95%,
+    var(--neon-pink) 100%
   );
-  animation: flowStream 3.5s infinite linear;
+  animation: flowStream 5s infinite linear;
   filter: blur(1px) brightness(1.8) contrast(2.2);
-  box-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-pink),
-    0 0 5px #ffffff;
+  box-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-pink);
   opacity: 0.95;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 5%,
+    black 95%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 5%,
+    black 95%,
+    transparent 100%
+  );
 }
 
 .neon-stream::after {
@@ -500,39 +494,67 @@ body {
   bottom: 0;
   background: radial-gradient(
     ellipse at center,
-    rgba(255, 255, 255, 0.8) 0%,
+    rgba(255, 255, 255, 0.4) 0%,
     rgba(255, 255, 255, 0) 70%
   );
   mix-blend-mode: overlay;
-  animation: pulseGlow 1.5s infinite alternate;
+  animation: pulseGlow 2s infinite alternate;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 5%,
+    black 95%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 5%,
+    black 95%,
+    transparent 100%
+  );
 }
 
 .neon-stream.right .stream-content {
-  animation-delay: 1.75s;
-  animation-duration: 4s;
+  animation-delay: 2.5s;
+  animation-duration: 5.5s;
   background: linear-gradient(
     to bottom,
     var(--neon-pink) 0%,
     rgba(255, 0, 255, 0.9) 5%,
-    #ffffff 10%,
-    var(--neon-blue) 15%,
-    rgba(0, 243, 255, 0.9) 20%,
-    #ffffff 25%,
-    var(--neon-pink) 30%,
-    rgba(255, 0, 255, 0.9) 35%,
-    #ffffff 40%,
-    var(--neon-blue) 45%,
-    rgba(0, 243, 255, 0.9) 50%,
-    #ffffff 55%,
+    var(--neon-blue) 10%,
+    rgba(0, 243, 255, 0.9) 15%,
+    var(--neon-pink) 20%,
+    rgba(255, 0, 255, 0.9) 25%,
+    var(--neon-blue) 30%,
+    rgba(0, 243, 255, 0.9) 35%,
+    var(--neon-pink) 40%,
+    rgba(255, 0, 255, 0.9) 45%,
+    var(--neon-blue) 50%,
+    rgba(0, 243, 255, 0.9) 55%,
     var(--neon-pink) 60%,
     rgba(255, 0, 255, 0.9) 65%,
-    #ffffff 70%,
-    var(--neon-blue) 75%,
-    rgba(0, 243, 255, 0.9) 80%,
-    #ffffff 85%,
-    var(--neon-pink) 90%,
-    var(--neon-blue) 95%,
+    var(--neon-blue) 70%,
+    rgba(0, 243, 255, 0.9) 75%,
+    var(--neon-pink) 80%,
+    rgba(255, 0, 255, 0.9) 85%,
+    var(--neon-blue) 90%,
+    var(--neon-pink) 95%,
     var(--neon-pink) 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 5%,
+    black 95%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 5%,
+    black 95%,
+    transparent 100%
   );
 }
 
@@ -594,28 +616,28 @@ body {
     to bottom,
     var(--neon-blue) 0%,
     rgba(0, 243, 255, 0.9) 5%,
-    #ffffff 10%,
-    var(--neon-pink) 15%,
-    rgba(255, 0, 255, 0.9) 20%,
-    #ffffff 25%,
-    var(--neon-blue) 30%,
-    rgba(0, 243, 255, 0.9) 35%,
-    #ffffff 40%,
-    var(--neon-pink) 45%,
-    rgba(255, 0, 255, 0.9) 50%,
-    #ffffff 55%,
+    var(--neon-pink) 10%,
+    rgba(255, 0, 255, 0.9) 15%,
+    var(--neon-blue) 20%,
+    rgba(0, 243, 255, 0.9) 25%,
+    var(--neon-pink) 30%,
+    rgba(255, 0, 255, 0.9) 35%,
+    var(--neon-blue) 40%,
+    rgba(0, 243, 255, 0.9) 45%,
+    var(--neon-pink) 50%,
+    rgba(255, 0, 255, 0.9) 55%,
     var(--neon-blue) 60%,
     rgba(0, 243, 255, 0.9) 65%,
-    #ffffff 70%,
-    var(--neon-pink) 75%,
-    rgba(255, 0, 255, 0.9) 80%,
-    #ffffff 85%,
-    var(--neon-blue) 90%,
-    var(--neon-pink) 95%,
-    var(--neon-blue) 100%
+    var(--neon-pink) 70%,
+    rgba(255, 0, 255, 0.9) 75%,
+    var(--neon-blue) 80%,
+    rgba(0, 243, 255, 0.9) 85%,
+    var(--neon-pink) 90%,
+    var(--neon-blue) 95%,
+    var(--neon-pink) 100%
   );
   background-size: 100% 300%;
-  animation: flowCardBorder 5s infinite linear;
+  animation: flowCardBorder 8s infinite linear;
   filter: blur(0.5px) brightness(1.2);
   transition: filter 0.3s ease, animation-duration 0.3s ease;
 }
@@ -631,93 +653,93 @@ body {
 
 /* Set different animation delays and color variations for each card */
 .feature-card[data-animation-delay="0"]::before {
-  animation-duration: 5s;
+  animation-duration: 8s;
   animation-name: flowCardBorder;
   background: linear-gradient(
     to bottom,
     var(--neon-blue) 0%,
     rgba(0, 243, 255, 0.9) 5%,
-    #ffffff 10%,
-    var(--neon-pink) 15%,
-    rgba(255, 0, 255, 0.9) 20%,
-    #ffffff 25%,
-    var(--neon-blue) 30%,
-    rgba(0, 243, 255, 0.9) 35%,
-    #ffffff 40%,
-    var(--neon-pink) 45%,
-    rgba(255, 0, 255, 0.9) 50%,
-    #ffffff 55%,
+    var(--neon-pink) 10%,
+    rgba(255, 0, 255, 0.9) 15%,
+    var(--neon-blue) 20%,
+    rgba(0, 243, 255, 0.9) 25%,
+    var(--neon-pink) 30%,
+    rgba(255, 0, 255, 0.9) 35%,
+    var(--neon-blue) 40%,
+    rgba(0, 243, 255, 0.9) 45%,
+    var(--neon-pink) 50%,
+    rgba(255, 0, 255, 0.9) 55%,
     var(--neon-blue) 60%,
     rgba(0, 243, 255, 0.9) 65%,
-    #ffffff 70%,
-    var(--neon-pink) 75%,
-    rgba(255, 0, 255, 0.9) 80%,
-    #ffffff 85%,
-    var(--neon-blue) 90%,
-    var(--neon-pink) 95%,
-    var(--neon-blue) 100%
+    var(--neon-pink) 70%,
+    rgba(255, 0, 255, 0.9) 75%,
+    var(--neon-blue) 80%,
+    rgba(0, 243, 255, 0.9) 85%,
+    var(--neon-pink) 90%,
+    var(--neon-blue) 95%,
+    var(--neon-pink) 100%
   );
   background-size: 100% 300%;
 }
 
 .feature-card[data-animation-delay="1"]::before {
-  animation-duration: 6s;
+  animation-duration: 8s;
   animation-name: flowCardBorder;
-  animation-delay: -2s;
+  animation-delay: -2.67s;
   background: linear-gradient(
     to bottom,
     var(--neon-pink) 0%,
     rgba(255, 0, 255, 0.9) 5%,
-    #ffffff 10%,
-    #00ffaa 15%,
-    rgba(0, 255, 170, 0.9) 20%,
-    #ffffff 25%,
-    var(--neon-pink) 30%,
-    rgba(255, 0, 255, 0.9) 35%,
-    #ffffff 40%,
-    #00ffaa 45%,
-    rgba(0, 255, 170, 0.9) 50%,
-    #ffffff 55%,
+    var(--neon-blue) 10%,
+    rgba(0, 243, 255, 0.9) 15%,
+    var(--neon-pink) 20%,
+    rgba(255, 0, 255, 0.9) 25%,
+    var(--neon-blue) 30%,
+    rgba(0, 243, 255, 0.9) 35%,
+    var(--neon-pink) 40%,
+    rgba(255, 0, 255, 0.9) 45%,
+    var(--neon-blue) 50%,
+    rgba(0, 243, 255, 0.9) 55%,
     var(--neon-pink) 60%,
     rgba(255, 0, 255, 0.9) 65%,
-    #ffffff 70%,
-    #00ffaa 75%,
-    rgba(0, 255, 170, 0.9) 80%,
-    #ffffff 85%,
-    var(--neon-pink) 90%,
-    #00ffaa 95%,
+    var(--neon-blue) 70%,
+    rgba(0, 243, 255, 0.9) 75%,
+    var(--neon-pink) 80%,
+    rgba(255, 0, 255, 0.9) 85%,
+    var(--neon-blue) 90%,
+    var(--neon-pink) 95%,
     var(--neon-pink) 100%
   );
   background-size: 100% 300%;
 }
 
 .feature-card[data-animation-delay="2"]::before {
-  animation-duration: 7s;
+  animation-duration: 8s;
   animation-name: flowCardBorder;
-  animation-delay: -3.5s;
+  animation-delay: -5.33s;
   background: linear-gradient(
     to bottom,
-    #ffcc00 0%,
-    rgba(255, 204, 0, 0.9) 5%,
-    #ffffff 10%,
-    var(--neon-blue) 15%,
-    rgba(0, 243, 255, 0.9) 20%,
-    #ffffff 25%,
-    #ffcc00 30%,
-    rgba(255, 204, 0, 0.9) 35%,
-    #ffffff 40%,
-    var(--neon-blue) 45%,
-    rgba(0, 243, 255, 0.9) 50%,
-    #ffffff 55%,
-    #ffcc00 60%,
-    rgba(255, 204, 0, 0.9) 65%,
-    #ffffff 70%,
-    var(--neon-blue) 75%,
-    rgba(0, 243, 255, 0.9) 80%,
-    #ffffff 85%,
-    #ffcc00 90%,
+    var(--neon-blue) 0%,
+    rgba(0, 243, 255, 0.9) 5%,
+    var(--neon-pink) 10%,
+    rgba(255, 0, 255, 0.9) 15%,
+    var(--neon-blue) 20%,
+    rgba(0, 243, 255, 0.9) 25%,
+    var(--neon-pink) 30%,
+    rgba(255, 0, 255, 0.9) 35%,
+    var(--neon-blue) 40%,
+    rgba(0, 243, 255, 0.9) 45%,
+    var(--neon-pink) 50%,
+    rgba(255, 0, 255, 0.9) 55%,
+    var(--neon-blue) 60%,
+    rgba(0, 243, 255, 0.9) 65%,
+    var(--neon-pink) 70%,
+    rgba(255, 0, 255, 0.9) 75%,
+    var(--neon-blue) 80%,
+    rgba(0, 243, 255, 0.9) 85%,
+    var(--neon-pink) 90%,
     var(--neon-blue) 95%,
-    #ffcc00 100%
+    var(--neon-pink) 100%
   );
   background-size: 100% 300%;
 }
