@@ -1,0 +1,31 @@
+.secondaryButton {
+  background: transparent;
+  border: 2px solid #00bfff;
+  border-radius: 4px;
+  color: #00bfff;
+  cursor: pointer;
+  font-weight: bold;
+  padding: 12px 30px;
+  font-size: 1.1rem;
+  min-width: 180px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.secondaryButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 191, 255, 0.2);
+  background: rgba(0, 191, 255, 0.05);
+}
+
+.secondaryButton:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 2px rgba(0, 191, 255, 0.1);
+}
+
+.secondaryButton:disabled {
+  border-color: #cccccc;
+  color: #cccccc;
+  cursor: not-allowed;
+  opacity: 0.7;
+}

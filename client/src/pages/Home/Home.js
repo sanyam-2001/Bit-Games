@@ -4,6 +4,7 @@ import Input, { InputGroup } from '../../components/ui/Input/Input';
 import Button from '../../components/ui/Button/Button';
 import styles from './Home.module.css';
 import PrimaryButton from '../../components/ui/PrimaryButton/PrimaryButton';
+import SecondaryButton from '../../components/ui/SecondaryButton/SecondaryButton';
 
 const Home = () => {
     const [isFlipped, setIsFlipped] = useState(false);
@@ -93,14 +94,14 @@ const Home = () => {
                                 </InputGroup>
                                 <FlexContainer direction="column" className={styles.buttonsContainer} align="center">
                                     <PrimaryButton type="submit" variant="primary">Join Room</PrimaryButton>
-                                    <PrimaryButton
+                                    <SecondaryButton
                                         type="button"
                                         variant="secondary"
                                         onClick={() => handleFlip(true)}
                                         disabled={isAnimating}
                                     >
                                         Create New Room
-                                    </PrimaryButton>
+                                    </SecondaryButton>
                                 </FlexContainer>
                             </form>
                         </Card>
@@ -136,14 +137,14 @@ const Home = () => {
                                 </InputGroup>
                                 <FlexContainer direction="column" className={styles.buttonsContainer} align="center">
                                     <PrimaryButton type="submit" variant="primary">Create Room</PrimaryButton>
-                                    <PrimaryButton
+                                    <SecondaryButton
                                         type="button"
                                         variant="secondary"
                                         onClick={() => handleFlip(false)}
                                         disabled={isAnimating}
                                     >
                                         Join Existing Room
-                                    </PrimaryButton>
+                                    </SecondaryButton>
                                 </FlexContainer>
                             </form>
                         </Card>
