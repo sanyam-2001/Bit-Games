@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, FlexContainer } from '../../components/ui/Container/Container';
 import Input, { InputGroup } from '../../components/ui/Input/Input';
 import styles from './Home.module.css';
 import PrimaryButton from '../../components/ui/PrimaryButton/PrimaryButton';
 import SecondaryButton from '../../components/ui/SecondaryButton/SecondaryButton';
+import { useSocket } from '../../context/SocketContext';
+
 const Home = () => {
     const [isFlipped, setIsFlipped] = useState(false);
-    const [loginData, setLoginData] = useState({ name: '', roomId: '' });
-    const [createRoomData, setCreateRoomData] = useState({ name: '', roomName: '' });
+    const [loginData, setLoginData] = useState({ name: '', lobbyId: '' });
+    const [createLobbyData, setCreateLobbyData] = useState({ name: '' });
     const [isAnimating, setIsAnimating] = useState(false);
-
+    const { socket, connected } = useSocket();
     // Handle card flip with animation lock
     const handleFlip = (flipState) => {
         if (!isAnimating) {
@@ -28,25 +30,41 @@ const Home = () => {
         });
     };
 
-    const handleCreateRoomChange = (e) => {
-        setCreateRoomData({
-            ...createRoomData,
+    const handleCreateLobbyChange = (e) => {
+        setCreateLobbyData({
+            ...createLobbyData,
             [e.target.name]: e.target.value
         });
     };
 
-    const handleJoinRoom = (e) => {
+    const handleJoinLobby = async (e) => {
         e.preventDefault();
-        console.log('Join Room:', loginData);
-        // Add join room logic here
+        console.log('Join Lobby:', loginData);
+        if (connected) {
+            socket.emit('joinLobby', loginData);
+        }
     };
 
-    const handleCreateRoom = (e) => {
+    const handleCreateLobby = async (e) => {
         e.preventDefault();
-        console.log('Create Room:', createRoomData);
-        // Add create room logic here
+        console.log('Create Lobby:', createLobbyData);
+        if (connected) {
+            socket.emit('createLobby', createLobbyData);
+        }
     };
+    useEffect(() => {
+        if (connected) {
+            socket.on('enterLobby', () => {
+                console.log('Entering lobby');
+            });
+        }
 
+        return () => {
+            if (socket) {
+                socket.off('enterLobby');
+            }
+        }
+    }, [socket, connected])
     return (
         <FlexContainer
             direction="column"
@@ -66,8 +84,8 @@ const Home = () => {
                             <div className={styles.gridBackground}></div>
                             <div className={styles.scanLines}></div>
                             <div></div> {/* This is for the pixelated border effect */}
-                            <h2 className={styles.cardTitle}>Join a Room</h2>
-                            <form onSubmit={handleJoinRoom}>
+                            <h2 className={styles.cardTitle}>Join a Lobby</h2>
+                            <form onSubmit={handleJoinLobby}>
                                 <InputGroup label="Name">
                                     <Input
                                         type="text"
@@ -79,26 +97,26 @@ const Home = () => {
                                         required
                                     />
                                 </InputGroup>
-                                <InputGroup label="Room ID">
+                                <InputGroup label="Lobby ID">
                                     <Input
                                         type="text"
-                                        name="roomId"
-                                        placeholder="Enter room ID"
-                                        value={loginData.roomId}
+                                        name="lobbyId"
+                                        placeholder="Enter lobby ID"
+                                        value={loginData.lobbyId}
                                         onChange={handleLoginChange}
                                         variant="primary"
                                         required
                                     />
                                 </InputGroup>
                                 <FlexContainer direction="column" className={styles.buttonsContainer} align="center">
-                                    <PrimaryButton type="submit" variant="primary">Join Room</PrimaryButton>
+                                    <PrimaryButton type="submit" variant="primary">Join Lobby</PrimaryButton>
                                     <SecondaryButton
                                         type="button"
                                         variant="secondary"
                                         onClick={() => handleFlip(true)}
                                         disabled={isAnimating}
                                     >
-                                        Create New Room
+                                        Create New Lobby
                                     </SecondaryButton>
                                 </FlexContainer>
                             </form>
@@ -109,39 +127,28 @@ const Home = () => {
                             <div className={styles.gridBackground}></div>
                             <div className={styles.scanLines}></div>
                             <div></div> {/* This is for the pixelated border effect */}
-                            <h2 className={styles.cardTitle}>Create a Room</h2>
-                            <form onSubmit={handleCreateRoom}>
+                            <h2 className={styles.cardTitle}>Create a Lobby</h2>
+                            <form onSubmit={handleCreateLobby}>
                                 <InputGroup label="Name">
                                     <Input
                                         type="text"
                                         name="name"
                                         placeholder="Enter your name"
-                                        value={createRoomData.name}
-                                        onChange={handleCreateRoomChange}
-                                        variant="primary"
-                                        required
-                                    />
-                                </InputGroup>
-                                <InputGroup label="Room Name">
-                                    <Input
-                                        type="text"
-                                        name="roomName"
-                                        placeholder="Enter room name"
-                                        value={createRoomData.roomName}
-                                        onChange={handleCreateRoomChange}
+                                        value={createLobbyData.name}
+                                        onChange={handleCreateLobbyChange}
                                         variant="primary"
                                         required
                                     />
                                 </InputGroup>
                                 <FlexContainer direction="column" className={styles.buttonsContainer} align="center">
-                                    <PrimaryButton type="submit" variant="primary">Create Room</PrimaryButton>
+                                    <PrimaryButton type="submit" variant="primary">Create Lobby</PrimaryButton>
                                     <SecondaryButton
                                         type="button"
                                         variant="secondary"
                                         onClick={() => handleFlip(false)}
                                         disabled={isAnimating}
                                     >
-                                        Join Existing Room
+                                        Join Existing Lobby
                                     </SecondaryButton>
                                 </FlexContainer>
                             </form>
