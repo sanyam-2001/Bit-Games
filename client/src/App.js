@@ -7,11 +7,12 @@ import { SocketProvider } from './context/SocketContext';
 import Home from './pages/Home/Home';
 import theme from './styles/theme';
 import GlobalStyles from './styles/GlobalStyles';
-
+import { Toast } from './components/ui/index';
 function App() {
     return (
         <ThemeProvider theme={theme}>
             <GlobalStyles />
+            <Toast />
             <Router>
                 <SocketProvider>
                     <Routes>

@@ -4,7 +4,6 @@ import Input, { InputGroup } from '../../components/ui/Input/Input';
 import styles from './Home.module.css';
 import PrimaryButton from '../../components/ui/PrimaryButton/PrimaryButton';
 import SecondaryButton from '../../components/ui/SecondaryButton/SecondaryButton';
-
 const Home = () => {
     const [isFlipped, setIsFlipped] = useState(false);
     const [loginData, setLoginData] = useState({ name: '', roomId: '' });
