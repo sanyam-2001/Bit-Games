@@ -1,4 +1,9 @@
 export const generateLobbyId = () => {
-    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let code = '';
+    for (let i = 0; i < 6; i++) {
+        code += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return code;
 };
 

@@ -39,7 +39,6 @@ const Home = () => {
 
     const handleJoinLobby = async (e) => {
         e.preventDefault();
-        console.log('Join Lobby:', loginData);
         if (connected) {
             socket.emit('joinLobby', loginData);
         }
@@ -47,15 +46,14 @@ const Home = () => {
 
     const handleCreateLobby = async (e) => {
         e.preventDefault();
-        console.log('Create Lobby:', createLobbyData);
         if (connected) {
             socket.emit('createLobby', createLobbyData);
         }
     };
     useEffect(() => {
         if (connected) {
-            socket.on('enterLobby', () => {
-                console.log('Entering lobby');
+            socket.on('enterLobby', ({ name, lobbyId }) => {
+                console.log(`Welcome to lobby ${lobbyId}, ${name}`);
             });
         }
 
