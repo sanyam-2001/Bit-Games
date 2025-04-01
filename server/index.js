@@ -4,6 +4,7 @@ import GlobalRoutes from "./routes/GlobalRoutes.js";
 import path from "path";
 import { setupSocketHandlers } from "./config/Socket.config.js";
 import { setupRedis } from "./config/Redis.config.js";
+import { fileURLToPath } from 'url';
 import * as dotenv from "dotenv";
 dotenv.config(); // Load environment variables from .env
 
@@ -12,8 +13,8 @@ const server = http.createServer(app);
 
 setupSocketHandlers(server);
 setupRedis()
-  .then((x) => console.log(x))
-  .catch((error) => console.error("Redis setup failed:", error));
+    .then((x) => console.log(x))
+    .catch((error) => console.error("Redis setup failed:", error));
 
 // Define PORT
 const PORT = process.env.PORT || 5001;
@@ -22,13 +23,15 @@ const PORT = process.env.PORT || 5001;
 app.use("/", GlobalRoutes);
 
 if (process.env.ENVIRONMENT === "PROD") {
-  app.use(express.static(path.join(__dirname, "../client/build")));
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../client/build", "index.html"));
-  });
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+    app.use(express.static(path.join(__dirname, "../client/build")));
+    app.get("*", (req, res) => {
+        res.sendFile(path.join(__dirname, "../client/build", "index.html"));
+    });
 }
 
 // Start server
 server.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });
