@@ -15,15 +15,11 @@ export const setupRedis = async () => {
     redisClient.on('error', err => console.log('Redis Client Error', err));
 
     return new Promise(async (resolve, reject) => {
-        try 
-        {
+        try {
             await redisClient.connect();
-            const result = await redisClient.get('foo');
-            console.log(result);
             resolve("Redis connected sucessfully");
-        } 
-        catch (err) 
-        {
+        }
+        catch (err) {
             console.error('Redis operation failed:', err);
             reject(err);
         }
