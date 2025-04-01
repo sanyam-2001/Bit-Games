@@ -204,3 +204,61 @@
     background-position: 0 100%;
   }
 }
+
+/* Spline Container Styles */
+.splineContainer {
+  width: 60%;
+  height: 600px;
+  position: relative;
+}
+
+.splineContainer > div {
+  width: 100%;
+  height: 100%;
+}
+
+/* Media Query for responsive layout */
+@media (max-width: 1200px) {
+  .splineContainer {
+    width: 50%;
+    height: 500px;
+  }
+}
+
+@media (max-width: 900px) {
+  .splineContainer {
+    display: none; /* Hide on smaller screens */
+  }
+  
+  .flippableCard {
+    max-width: 90%;
+  }
+}
+
+.frostedBlue {
+  background: rgba(173, 216, 230, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(173, 216, 230, 0.3);
+}
+
+.frostedBlueOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(173, 216, 230, 0.2), rgba(100, 149, 237, 0.2));
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.styledCard {
+  position: relative;
+  overflow: hidden;
+}
+
+.cardTitle, form {
+  position: relative;
+  z-index: 2;
+}

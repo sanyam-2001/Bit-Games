@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Spline from '@splinetool/react-spline';
 import { Card, FlexContainer } from '../../components/ui/Container/Container';
 import Input, { InputGroup } from '../../components/ui/Input/Input';
 import styles from './Home.module.css';
@@ -65,23 +66,26 @@ const Home = () => {
     }, [socket, connected])
     return (
         <FlexContainer
-            direction="column"
+            direction="row"
             align="center"
             justify="center"
             style={{
                 minHeight: '100vh',
+                width: '100%',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center'
+                justifyContent: 'center',
+                gap: '2rem'
             }}
         >
+           
             <div className={styles.flippableCard}>
                 <div className={`${styles.cardInner} ${isFlipped ? styles.flipped : styles.notFlipped}`}>
-                    <div className={`${styles.cardSide} ${styles.cardFront}`}>
+                    <div className={`${styles.cardSide} ${styles.cardFront} ${styles.frostedBlue}`}>
                         <Card className={styles.styledCard}>
                             <div className={styles.gridBackground}></div>
                             <div className={styles.scanLines}></div>
-                            <div></div> {/* This is for the pixelated border effect */}
+                            <div className={styles.frostedBlueOverlay}></div>
                             <h2 className={styles.cardTitle}>Join a Lobby</h2>
                             <form onSubmit={handleJoinLobby}>
                                 <InputGroup label="Name">
@@ -120,11 +124,11 @@ const Home = () => {
                             </form>
                         </Card>
                     </div>
-                    <div className={`${styles.cardSide} ${styles.cardBack}`}>
+                    <div className={`${styles.cardSide} ${styles.cardBack} ${styles.frostedBlue}`}>
                         <Card className={styles.styledCard}>
                             <div className={styles.gridBackground}></div>
                             <div className={styles.scanLines}></div>
-                            <div></div> {/* This is for the pixelated border effect */}
+                            <div className={styles.frostedBlueOverlay}></div>
                             <h2 className={styles.cardTitle}>Create a Lobby</h2>
                             <form onSubmit={handleCreateLobby}>
                                 <InputGroup label="Name">
@@ -153,6 +157,9 @@ const Home = () => {
                         </Card>
                     </div>
                 </div>
+            </div>
+            <div className={styles.splineContainer}>
+                <Spline scene="https://prod.spline.design/Srlm6Ga2ks2466Ta/scene.splinecode" />
             </div>
         </FlexContainer>
     );
