@@ -1,7 +1,6 @@
 import { Server } from 'socket.io';
 import { timelog } from '../utils/LoggingUtils.js';
-import { handleJoinLobby, handleCreateLobby } from '../handlers/roomHandlers.js';
-
+import { registerLobbyHandlers } from '../handlers/lobbyHandler.js';
 export const setupSocketHandlers = (server) => {
     const io = new Server(server, {
         cors: {
@@ -14,8 +13,7 @@ export const setupSocketHandlers = (server) => {
         timelog(`New client connected: ${socket.id}`);
 
         // Handle And Create room
-        socket.on('joinLobby', (data) => handleJoinLobby(socket, data));
-        socket.on('createLobby', (data) => handleCreateLobby(socket, data));
+        registerLobbyHandlers(socket);
 
         socket.on('disconnect', () => {
             timelog(`Client disconnected: ${socket.id}`);
