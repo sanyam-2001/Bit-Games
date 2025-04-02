@@ -7,6 +7,7 @@ import PrimaryButton from "../../components/ui/PrimaryButton/PrimaryButton";
 import SecondaryButton from "../../components/ui/SecondaryButton/SecondaryButton";
 import { useSocket } from "../../context/SocketContext";
 import { showToast } from "../../utils/toast";
+import { SocketEvents as events } from "../../enums/socketevents.enums";
 
 const Home = () => {
   const [isFlipped, setIsFlipped] = useState(false);
@@ -42,26 +43,32 @@ const Home = () => {
   const handleJoinLobby = async (e) => {
     e.preventDefault();
     if (connected) {
-      socket.emit("joinLobby", loginData);
+      socket.emit(events.JOIN_LOBBY, loginData);
     }
   };
 
   const handleCreateLobby = async (e) => {
     e.preventDefault();
     if (connected) {
-      socket.emit("createLobby", createLobbyData);
+      socket.emit(events.CREATE_LOBBY, createLobbyData);
     }
   };
   useEffect(() => {
     if (connected) {
-      socket.on("enterLobby", ({ name, lobbyId }) => {
-        console.log(`Welcome to lobby ${lobbyId}, ${name}`);
+      socket.on(events.ENTER_LOBBY, ({ success, error, data }) => {
+        if (success) {
+          console.log(
+            `Welcome to lobby ${data.lobby.lobbyId}, ${data.lobby.players[0].name}`
+          );
+        } else {
+          showToast(error, "error");
+        }
       });
     }
 
     return () => {
       if (socket) {
-        socket.off("enterLobby");
+        socket.off(events.ENTER_LOBBY);
       }
     };
   }, [socket, connected]);
