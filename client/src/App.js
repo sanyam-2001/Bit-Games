@@ -20,15 +20,15 @@ function App() {
                 <SocketProvider>
                     <GlobalProvider>
                         <Routes>
-                            <Route path='/' element={
+                            {/* <Route path='/' element={
                                 <div className="App">
                                     <LandingPage />
                                 </div>
                             } />
                             <Route path="/home" element={
                                 <Home />
-                            } />
-                            <Route path="/lobby" element={
+                            } /> */}
+                            <Route path="/" element={
                                 <Lobby />
                             } />
                         </Routes>

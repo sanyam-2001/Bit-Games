@@ -1,0 +1,538 @@
+/* SideMenu.module.css */
+
+.menuContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-right: 1px solid rgba(8, 247, 254, 0.3);
+  box-shadow: 0 0 15px rgba(8, 247, 254, 0.2);
+}
+
+/* Custom scrollbar styling */
+.menuContainer::-webkit-scrollbar,
+.sectionContainer::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.menuContainer::-webkit-scrollbar-track,
+.sectionContainer::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+}
+
+.menuContainer::-webkit-scrollbar-thumb,
+.sectionContainer::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.menuContainer::-webkit-scrollbar-thumb:hover,
+.sectionContainer::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 1);
+}
+
+/* Firefox scrollbar styling */
+.menuContainer,
+.sectionContainer {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.7) rgba(0, 0, 0, 0.3);
+}
+
+.hidden {
+  opacity: 0;
+}
+
+.menuHeader {
+  padding: 24px 16px;
+  border-bottom: 1px solid rgba(8, 247, 254, 0.2);
+  margin-bottom: 16px;
+}
+
+.menuTitle {
+  font-family: "Share Tech Mono", monospace;
+  color: var(--neon-blue);
+  font-size: 1.8rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 0 0 5px var(--neon-blue);
+  text-align: center;
+}
+
+.logoSection {
+  padding: 24px 16px;
+  border-bottom: 1px solid rgba(8, 247, 254, 0.2);
+  margin-bottom: 16px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.logoText {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: transparent;
+  background: linear-gradient(
+    to right,
+    var(--neon-blue) 0%,
+    var(--neon-pink) 50%,
+    var(--neon-blue) 100%
+  );
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  animation: flow 8s linear infinite;
+  margin: 0;
+}
+
+/* Pixelated effect for the logo */
+.logoText.pixelated {
+  position: relative;
+  padding: 15px 10px;
+  font-family: "Press Start 2P", "Share Tech Mono", monospace;
+  font-size: 1.8rem;
+  letter-spacing: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--neon-blue) 0%,
+    var(--neon-pink) 50%,
+    var(--neon-blue) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: textGradient 5s linear infinite, glitchEffect 3s infinite;
+  text-shadow: 0 0 5px rgba(0, 243, 255, 0.7);
+  border-radius: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  white-space: nowrap;
+}
+
+@keyframes textGradient {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+/* Glitch animation keyframes */
+@keyframes glitchEffect {
+  0%,
+  100% {
+    transform: translate(0);
+    text-shadow: 0 0 8px rgba(0, 243, 255, 0.7);
+  }
+  92% {
+    transform: translate(0);
+    text-shadow: 0 0 8px rgba(0, 243, 255, 0.7);
+  }
+  93% {
+    transform: translate(-2px, 0) skew(0deg);
+    text-shadow: -4px 0 rgba(255, 0, 255, 0.7);
+  }
+  94% {
+    transform: translate(2px, 0) skew(0deg);
+    text-shadow: 4px 0 rgba(0, 243, 255, 0.7);
+  }
+  95% {
+    transform: translate(-2px, 0) skew(0deg);
+    text-shadow: -4px 0 rgba(255, 0, 255, 0.7);
+  }
+  96% {
+    transform: translate(0) skew(5deg);
+    text-shadow: 0 0 8px rgba(0, 243, 255, 0.7);
+  }
+  97% {
+    transform: translate(0) skew(-5deg);
+  }
+  98% {
+    transform: translate(0);
+    text-shadow: 0 0 8px rgba(0, 243, 255, 0.7), -4px 0 rgba(255, 0, 255, 0.7),
+      4px 0 rgba(0, 243, 255, 0.7);
+  }
+  99% {
+    transform: translate(0);
+    text-shadow: 0 0 8px rgba(0, 243, 255, 0.7);
+  }
+}
+
+/* Create the RGB split glitch effect layers */
+.logoText.pixelated::before,
+.logoText.pixelated::after {
+  content: "BIT GAMES";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 15px 10px;
+  box-sizing: border-box;
+}
+
+/* Create the RGB split glitch effect layers */
+.logoText.pixelated::before {
+  z-index: -1;
+  opacity: 0.8;
+  image-rendering: pixelated;
+  color: transparent;
+  text-shadow: -1px 0 var(--neon-blue);
+  animation: glitchLayerOne 4s infinite;
+}
+
+.logoText.pixelated::after {
+  z-index: -1;
+  color: transparent;
+  text-shadow: 1px 0 var(--neon-pink);
+  animation: glitchLayerTwo 5s infinite;
+}
+
+@keyframes glitchLayerOne {
+  0%,
+  100% {
+    transform: translate(0);
+    opacity: 0.3;
+  }
+  92% {
+    transform: translate(0);
+    opacity: 0.3;
+  }
+  93% {
+    transform: translate(-3px, 1px);
+    opacity: 0.5;
+  }
+  94% {
+    transform: translate(2px, -1px);
+    opacity: 0.4;
+  }
+  95% {
+    transform: translate(0);
+    opacity: 0.3;
+  }
+  96% {
+    transform: translate(-2px, 0);
+    opacity: 0.5;
+  }
+  97% {
+    transform: translate(0);
+    opacity: 0.3;
+  }
+  98% {
+    transform: translate(2px, 2px);
+    opacity: 0.4;
+  }
+  99% {
+    transform: translate(0);
+    opacity: 0.3;
+  }
+}
+
+@keyframes glitchLayerTwo {
+  0%,
+  100% {
+    transform: translate(0);
+    opacity: 0.3;
+  }
+  92% {
+    transform: translate(0);
+    opacity: 0.3;
+  }
+  93% {
+    transform: translate(3px, -1px);
+    opacity: 0.5;
+  }
+  94% {
+    transform: translate(-2px, 1px);
+    opacity: 0.4;
+  }
+  95% {
+    transform: translate(0);
+    opacity: 0.3;
+  }
+  96% {
+    transform: translate(2px, 0);
+    opacity: 0.5;
+  }
+  97% {
+    transform: translate(0);
+    opacity: 0.3;
+  }
+  98% {
+    transform: translate(-2px, -2px);
+    opacity: 0.4;
+  }
+  99% {
+    transform: translate(0);
+    opacity: 0.3;
+  }
+}
+
+/* Add scanlines effect */
+.logoSection::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent 3px,
+    rgba(0, 243, 255, 0.03) 3px,
+    rgba(0, 243, 255, 0.03) 6px
+  );
+  pointer-events: none;
+  z-index: 2;
+  border-radius: 8px;
+  animation: scanlineMove 3s linear infinite;
+}
+
+@keyframes scanlineMove {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 60px;
+  }
+}
+
+@keyframes flow {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.tagline {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin-top: 8px;
+  letter-spacing: 1px;
+}
+
+.sectionContainer {
+  padding: 0 16px;
+  margin-bottom: 24px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.sectionTitle {
+  font-family: "Share Tech Mono", monospace;
+  color: var(--neon-pink);
+  font-size: 1.2rem;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 0 0 5px var(--neon-pink);
+}
+
+.playerList,
+.leaderboardList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.playerItem,
+.leaderboardItem {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  margin-bottom: 8px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(8, 247, 254, 0.2);
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.playerItem:hover,
+.leaderboardItem:hover {
+  background-color: rgba(8, 247, 254, 0.1);
+  border-color: rgba(8, 247, 254, 0.4);
+}
+
+.playerName {
+  flex: 1;
+  font-size: 1rem;
+  color: var(--text-color);
+}
+
+.playerStatus {
+  font-size: 0.8rem;
+  padding: 4px 8px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.ready {
+  background-color: rgba(0, 255, 0, 0.2);
+  color: #00ff00;
+  border: 1px solid rgba(0, 255, 0, 0.4);
+}
+
+.in-game {
+  background-color: rgba(255, 165, 0, 0.2);
+  color: #ffa500;
+  border: 1px solid rgba(255, 165, 0, 0.4);
+}
+
+.away {
+  background-color: rgba(128, 128, 128, 0.2);
+  color: #808080;
+  border: 1px solid rgba(128, 128, 128, 0.4);
+}
+
+.rank {
+  width: 30px;
+  font-weight: bold;
+  color: var(--neon-blue);
+  text-shadow: 0 0 5px var(--neon-blue);
+}
+
+.score {
+  font-weight: bold;
+  color: var(--neon-pink);
+  text-shadow: 0 0 5px var(--neon-pink);
+}
+
+.menuContent {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex: 1;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+  color: var(--text-color);
+}
+
+.active {
+  color: var(--neon-blue);
+}
+
+.menuItem:hover {
+  background-color: rgba(8, 247, 254, 0.1);
+  color: var(--neon-blue);
+}
+
+.glowLine {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: var(--neon-blue);
+  box-shadow: 0 0 10px var(--neon-blue);
+}
+
+.menuIcon {
+  margin-right: 16px;
+  font-size: 1.2rem;
+}
+
+.menuText {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.menuFooter {
+  padding: 24px 0;
+  border-top: 1px solid rgba(8, 247, 254, 0.2);
+  margin-top: auto;
+}
+
+.logoutButton {
+  display: flex;
+  align-items: center;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  padding: 16px;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  transition: all 0.3s ease;
+}
+
+.logoutButton:hover {
+  color: var(--neon-pink);
+}
+
+.lobbyIdSection {
+  padding: 16px;
+  border-top: 1px solid rgba(8, 247, 254, 0.2);
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.lobbyIdContainer {
+  display: flex;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(8, 247, 254, 0.2);
+  border-radius: 4px;
+  padding: 12px;
+}
+
+.lobbyIdLabel {
+  font-family: "Share Tech Mono", monospace;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-right: 8px;
+}
+
+.lobbyId {
+  font-family: "Share Tech Mono", monospace;
+  color: var(--neon-blue);
+  font-size: 1rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-shadow: 0 0 5px var(--neon-blue);
+}
+
+.copyButton {
+  background-color: rgba(8, 247, 254, 0.1);
+  border: 1px solid rgba(8, 247, 254, 0.3);
+  color: var(--neon-blue);
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.9rem;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.copyButton:hover {
+  background-color: rgba(8, 247, 254, 0.2);
+  border-color: rgba(8, 247, 254, 0.5);
+  box-shadow: 0 0 10px rgba(8, 247, 254, 0.3);
+}
