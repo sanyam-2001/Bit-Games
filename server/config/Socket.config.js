@@ -13,7 +13,7 @@ export const setupSocketHandlers = (server) => {
         timelog(`New client connected: ${socket.id}`);
 
         // Handle And Create room
-        registerLobbyHandlers(socket);
+        registerLobbyHandlers(io, socket);
 
         socket.on('disconnect', () => {
             timelog(`Client disconnected: ${socket.id}`);

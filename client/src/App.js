@@ -8,6 +8,8 @@ import Home from './pages/Home/Home';
 import theme from './styles/theme';
 import GlobalStyles from './styles/GlobalStyles';
 import { Toast } from './components/ui/index';
+import { GlobalProvider } from './context/GlobalContext';
+
 function App() {
     return (
         <ThemeProvider theme={theme}>
@@ -15,16 +17,18 @@ function App() {
             <Toast />
             <Router>
                 <SocketProvider>
-                    <Routes>
-                        <Route path='/' element={
-                            <div className="App">
-                                <LandingPage />
-                            </div>
-                        } />
-                        <Route path="/home" element={
-                            <Home />
-                        } />
-                    </Routes>
+                    <GlobalProvider>
+                        <Routes>
+                            <Route path='/' element={
+                                <div className="App">
+                                    <LandingPage />
+                                </div>
+                            } />
+                            <Route path="/home" element={
+                                <Home />
+                            } />
+                        </Routes>
+                    </GlobalProvider>
                 </SocketProvider>
             </Router>
         </ThemeProvider>

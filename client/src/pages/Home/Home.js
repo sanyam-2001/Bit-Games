@@ -8,13 +8,16 @@ import SecondaryButton from "../../components/ui/SecondaryButton/SecondaryButton
 import { useSocket } from "../../context/SocketContext";
 import { showToast } from "../../utils/toast";
 import { SocketEvents as events } from "../../enums/socketevents.enums";
-
+import { useGlobal } from "../../context/GlobalContext";
+import { useNavigate } from "react-router-dom";
 const Home = () => {
     const [isFlipped, setIsFlipped] = useState(false);
     const [loginData, setLoginData] = useState({ name: "", lobbyId: "" });
     const [createLobbyData, setCreateLobbyData] = useState({ name: "" });
     const [isAnimating, setIsAnimating] = useState(false);
     const { socket, connected } = useSocket();
+    const { setCurrentUser, setLobby } = useGlobal();
+    const navigate = useNavigate();
     // Handle card flip with animation lock
     const handleFlip = (flipState) => {
         if (!isAnimating) {
@@ -57,11 +60,14 @@ const Home = () => {
         if (connected) {
             socket.on(events.ENTER_LOBBY, ({ success, error, data }) => {
                 if (success) {
-                    console.log(
-                        `Welcome to lobby ${data.lobby.id}, ${data.lobby.players[0].name}`
-                    );
+                    const { newPlayer, lobby } = data;
+                    setCurrentUser(newPlayer);
+                    setLobby(lobby);
+                    //Code TO redirect to lobby page
+
+                    navigate("/lobby");
                 } else {
-                    showToast(error, "error");
+                    showToast.error(error, "error");
                 }
             });
         }
@@ -71,7 +77,7 @@ const Home = () => {
                 socket.off(events.ENTER_LOBBY);
             }
         };
-    }, [socket, connected]);
+    }, [socket, connected, navigate, setCurrentUser, setLobby]);
     return (
         <FlexContainer
             direction="row"
