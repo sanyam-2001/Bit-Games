@@ -190,9 +190,9 @@ const Home = () => {
                     </div>
                 </div>
             </div>
-            <div className={styles.splineContainer}>
+            {/* <div className={styles.splineContainer}>
                 <Spline scene="https://prod.spline.design/Srlm6Ga2ks2466Ta/scene.splinecode" />
-            </div>
+            </div> */}
         </FlexContainer>
     );
 };

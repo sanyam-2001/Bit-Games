@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import LandingPage from './components/LandingPage/LandingPage';
+import LandingPage from './pages/LandingPage/LandingPage';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
@@ -37,15 +37,15 @@ const AppContent = () => {
 
     return (
         <Routes>
-            {/* <Route path='/' element={
+            <Route path='/' element={
                 <div className="App">
                     <LandingPage />
                 </div>
             } />
             <Route path="/home" element={
                 <Home />
-            } /> */}
-            <Route path="/" element={
+            } />
+            <Route path="/lobby" element={
                 <Lobby />
             } />
         </Routes>

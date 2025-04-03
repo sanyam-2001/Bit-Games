@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigator } from '../../utils/navigator';
 import './LandingPage.css';
-import ParticleBackground from '../ParticleBackground/ParticleBackground';
-import PrimaryButton from '../ui/PrimaryButton/PrimaryButton';
+import ParticleBackground from '../../components/ParticleBackground/ParticleBackground';
+import PrimaryButton from '../../components/ui/PrimaryButton/PrimaryButton';
 const LandingPage = () => {
     const [isParticleActive, setIsParticleActive] = useState(false);
     const navigate = useNavigator();

@@ -396,7 +396,7 @@
   border: 1px solid rgba(255, 165, 0, 0.4);
 }
 
-.away {
+.not-ready {
   background-color: rgba(128, 128, 128, 0.2);
   color: #808080;
   border: 1px solid rgba(128, 128, 128, 0.4);
