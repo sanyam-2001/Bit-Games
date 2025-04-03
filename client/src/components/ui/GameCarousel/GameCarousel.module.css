@@ -1,0 +1,263 @@
+/* GameCarousel.css */
+
+/* Outer Container */
+.gameCarouselContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: rgba(10, 14, 23, 0.4);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(8, 247, 254, 0.2);
+  box-shadow: 0 0 15px rgba(8, 247, 254, 0.1);
+  padding: 8px 0;
+  margin: 20px 0;
+}
+
+/* Container */
+.carouselContainer {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 260px;
+  padding: 0 60px;
+}
+
+.cardsContainer {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  gap: 40px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 0 20px;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  margin: 0 auto;
+}
+
+.cardsContainer::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* Add a wrapper for the cards to help with centering */
+.cardsWrapper {
+  display: flex;
+  gap: 40px;
+  margin: 0 auto;
+  justify-content: center;
+  min-width: min-content;
+}
+
+/* Game Cards */
+.gameCard {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.5s ease;
+  border: 1px solid rgba(8, 247, 254, 0.2);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.cardOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+  transition: background-color 0.3s ease;
+}
+
+.gameCard:hover .cardOverlay {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.positionCenter {
+  border-color: var(--neon-blue);
+  box-shadow: 0 0 15px var(--neon-blue);
+  transform: scale(1.05);
+  z-index: 10;
+}
+
+.positionLeft,
+.positionRight {
+  opacity: 0.9;
+}
+
+.cardGlow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    rgba(8, 247, 254, 0.1),
+    rgba(254, 83, 187, 0.1)
+  );
+  pointer-events: none;
+  opacity: 0;
+  animation: pulse 3s infinite;
+  transition: opacity 0.5s ease;
+  z-index: 2;
+}
+
+.positionCenter .cardGlow {
+  opacity: 1;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+.cardContent {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transform: translateY(100%);
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.7));
+  border-top: 2px solid var(--neon-blue);
+  box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.gameCard:hover .cardContent {
+  transform: translateY(0);
+}
+
+.cardTitle {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 1.2rem;
+  margin: 0;
+  color: white;
+  text-shadow: 0 0 5px var(--neon-blue);
+  font-weight: bold;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.3s ease 0.2s, transform 0.3s ease 0.2s;
+}
+
+.gameCard:hover .cardTitle {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.cardPlayers {
+  font-size: 0.8rem;
+  color: var(--neon-pink);
+  margin: 0;
+  text-shadow: 0 0 3px var(--neon-pink);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.3s ease 0.3s, transform 0.3s ease 0.3s;
+}
+
+.gameCard:hover .cardPlayers {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.cardDescription {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  line-height: 1.4;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.3s ease 0.4s, transform 0.3s ease 0.4s;
+}
+
+.gameCard:hover .cardDescription {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Carousel Controls */
+.carouselButton {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(10, 14, 23, 0.7);
+  border: 1px solid rgba(8, 247, 254, 0.3);
+  color: var(--neon-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 20;
+  transition: all 0.3s ease;
+}
+
+.carouselButton:hover {
+  background-color: rgba(8, 247, 254, 0.2);
+  box-shadow: 0 0 10px var(--neon-blue);
+}
+
+.left {
+  left: 10px;
+}
+
+.right {
+  right: 10px;
+}
+
+/* Indicators */
+.gameIndicators {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  z-index: 20;
+}
+
+.gameIndicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: rgba(8, 247, 254, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.active {
+  background-color: var(--neon-blue);
+  box-shadow: 0 0 5px var(--neon-blue);
+}
+
+.gameIndicator:hover {
+  background-color: var(--neon-blue);
+  box-shadow: 0 0 8px var(--neon-blue);
+}

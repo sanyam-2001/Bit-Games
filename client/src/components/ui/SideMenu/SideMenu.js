@@ -1,49 +1,62 @@
-import React from 'react';
-import './SideMenu.css';
+import React, { useState, useEffect } from 'react';
+import styles from './SideMenu.module.css';
+import { useGlobal } from '../../../context/GlobalContext';
 
-const SideMenu = ({ isOpen }) => {
-  return (
-    <div className={`menu-container ${!isOpen ? 'hidden' : ''}`}>
-      <div className="menu-header">
-        <h2 className="menu-title">Menu</h2>
-      </div>
-      
-      <ul className="menu-content">
-        <li className="menu-item active">
-          <i className="menu-icon fas fa-gamepad"></i>
-          <span className="menu-text">Games</span>
-          <div className="glow-line"></div>
-        </li>
-        
-        <li className="menu-item">
-          <i className="menu-icon fas fa-user"></i>
-          <span className="menu-text">Profile</span>
-        </li>
-        
-        <li className="menu-item">
-          <i className="menu-icon fas fa-users"></i>
-          <span className="menu-text">Friends</span>
-        </li>
-        
-        <li className="menu-item">
-          <i className="menu-icon fas fa-trophy"></i>
-          <span className="menu-text">Leaderboard</span>
-        </li>
-        
-        <li className="menu-item">
-          <i className="menu-icon fas fa-cog"></i>
-          <span className="menu-text">Settings</span>
-        </li>
-      </ul>
-      
-      <div className="menu-footer">
-        <button className="logout-button">
-          <i className="menu-icon fas fa-sign-out-alt"></i>
-          <span className="menu-text">Logout</span>
-        </button>
-      </div>
-    </div>
-  );
+const SideMenu = () => {
+    const { lobby } = useGlobal();
+    const [players, setPlayers] = useState([]);
+
+    useEffect(() => {
+        if (lobby?.players) {
+            setPlayers(lobby.players);
+        }
+    }, [lobby?.players]);
+
+    // Mock lobby ID
+    const lobbyId = lobby?.id;
+
+    const [copySuccess, setCopySuccess] = useState(false);
+    const copyToClipboard = () => {
+        navigator.clipboard.writeText(lobbyId);
+        setCopySuccess(true);
+        setTimeout(() => setCopySuccess(false), 2000);
+    };
+
+    return (
+        <div className={styles.menuContainer}>
+            <div className={styles.logoSection}>
+                <h1 className={`${styles.logoText} ${styles.pixelated}`}>BIT GAMES</h1>
+            </div>
+
+            <div className={styles.sectionContainer}>
+                <h3 className={styles.sectionTitle}>Players in Lobby</h3>
+                <ul className={styles.playerList}>
+                    {players.map(player => (
+                        <li key={player.id} className={styles.playerItem}>
+                            <span className={styles.playerName}>{player.name}</span>
+                            <span className={`${styles.playerStatus} ${styles[player?.status?.toLowerCase()] || "not-ready"}`}>
+                                {player.status}
+                            </span>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+
+            <div className={styles.lobbyIdSection}>
+                <div className={styles.lobbyIdContainer}>
+                    <span className={styles.lobbyIdLabel}>Lobby ID:</span>
+                    <span className={styles.lobbyId}>{lobbyId}</span>
+                </div>
+                <button
+                    className={styles.copyButton}
+                    onClick={copyToClipboard}
+                    title="Copy to clipboard"
+                >
+                    {copySuccess ? 'Copied!' : 'Copy'}
+                </button>
+            </div>
+        </div>
+    );
 };
 
 export default SideMenu; 

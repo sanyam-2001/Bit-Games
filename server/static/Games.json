@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "name": "Tic Tac Toe",
+    "description": "Oldie with a Twist",
+    "img": "/ticTacToe.png",
+    "players": {
+      "min": 2,
+      "max": 2
+    }
+  },
+  {
+    "id": 2,
+    "name": "Shazam",
+    "description": "Music Guessing Game",
+    "img": "/shazam.png",
+    "players": {
+      "min": 2,
+      "max": 8
+    }
+  },
+  {
+    "id": 3,
+    "name": "JKLM",
+    "description": "Guess words with a twist",
+    "img": "/jklm.png",
+    "players": {
+      "min": 2,
+      "max": 8
+    }
+  }
+]

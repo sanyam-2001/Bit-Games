@@ -5,13 +5,16 @@ const GlobalContext = createContext();
 export const GlobalProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null);
     const [lobby, setLobby] = useState(null);
+    const [gameList, setGameList] = useState([]);
 
     return (
         <GlobalContext.Provider value={{
             currentUser,
             setCurrentUser,
             lobby,
-            setLobby
+            setLobby,
+            gameList,
+            setGameList
         }}>
             {children}
         </GlobalContext.Provider>

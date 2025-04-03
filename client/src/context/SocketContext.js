@@ -8,46 +8,46 @@ const SocketContext = createContext(null);
 const SOCKET_URL = "http://localhost:5001";
 
 export const SocketProvider = ({ children }) => {
-  const [socket, setSocket] = useState(null);
-  const [connected, setConnected] = useState(false);
+    const [socket, setSocket] = useState(null);
+    const [connected, setConnected] = useState(false);
 
-  useEffect(() => {
-    // Create socket connection
-    console.log("SOCKET_URL", SOCKET_URL);
-    const newSocket = io(SOCKET_URL);
+    useEffect(() => {
+        // Create socket connection
+        console.log("SOCKET_URL", SOCKET_URL);
+        const newSocket = io(SOCKET_URL);
 
-    newSocket.on("connect", () => {
-      console.log("Connected to server");
-      setConnected(true);
-    });
+        newSocket.on("connect", () => {
+            console.log("Connected to server");
+            setConnected(true);
+        });
 
-    newSocket.on("disconnect", () => {
-      console.log("Disconnected from server");
-      setConnected(false);
-    });
+        newSocket.on("disconnect", () => {
+            console.log("Disconnected from server");
+            setConnected(false);
+        });
 
-    setSocket(newSocket);
+        setSocket(newSocket);
 
-    // Clean up socket connection on unmount
-    return () => {
-      if (newSocket) newSocket.disconnect();
-    };
-  }, []);
+        // Clean up socket connection on unmount
+        return () => {
+            if (newSocket) newSocket.disconnect();
+        };
+    }, []);
 
-  return (
-    <SocketContext.Provider value={{ socket, connected }}>
-      {children}
-    </SocketContext.Provider>
-  );
+    return (
+        <SocketContext.Provider value={{ socket, connected }}>
+            {children}
+        </SocketContext.Provider>
+    );
 };
 
 // Custom hook to use socket context
 export const useSocket = () => {
-  const context = useContext(SocketContext);
-  if (!context) {
-    throw new Error("useSocket must be used within a SocketProvider");
-  }
-  return context;
+    const context = useContext(SocketContext);
+    if (!context) {
+        throw new Error("useSocket must be used within a SocketProvider");
+    }
+    return context;
 };
 
 export default SocketContext;
