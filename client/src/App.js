@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { SocketProvider } from './context/SocketContext';
 import Home from './pages/Home/Home';
+import Lobby from './pages/Lobby/Lobby';
 import theme from './styles/theme';
 import GlobalStyles from './styles/GlobalStyles';
 import { Toast } from './components/ui/index';
@@ -26,6 +27,9 @@ function App() {
                             } />
                             <Route path="/home" element={
                                 <Home />
+                            } />
+                            <Route path="/lobby" element={
+                                <Lobby />
                             } />
                         </Routes>
                     </GlobalProvider>
