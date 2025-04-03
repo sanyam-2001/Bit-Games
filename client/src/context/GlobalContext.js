@@ -4,13 +4,13 @@ const GlobalContext = createContext();
 
 export const GlobalProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null);
-    const [Lobby, setLobby] = useState(null);
+    const [lobby, setLobby] = useState(null);
 
     return (
         <GlobalContext.Provider value={{
             currentUser,
             setCurrentUser,
-            Lobby,
+            lobby,
             setLobby
         }}>
             {children}
