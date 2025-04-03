@@ -60,6 +60,7 @@ const Home = () => {
                     console.log(
                         `Welcome to lobby ${data.lobby.id}, ${data.lobby.players[0].name}`
                     );
+                    console.log(data.lobby)
                 } else {
                     showToast(error, "error");
                 }
