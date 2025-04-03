@@ -1,33 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styles from './GameCarousel.module.css';
-
+import { useGlobal } from '../../../context/GlobalContext';
+import { showToast } from '../../../utils/toast';
 // Sample game data - in a real app, this would come from an API
-const games = [
-    {
-        id: 1,
-        title: 'Tic Tac Toe',
-        image: '/ticTacToe.png',
-        players: '2 players',
-        description: 'High-speed futuristic racing game',
-    },
-    {
-        id: 2,
-        title: 'Shazam',
-        image: '/shazam.png',
-        players: '2-8 players',
-        description: 'Battle arena with neon weapons',
-    },
-    {
-        id: 4,
-        title: 'JKLM',
-        image: '/jklm.png',
-        players: '2-8 players',
-        description: 'Race in procedurally generated tracks',
-    }
-];
 
 const GameCarousel = () => {
     const [activeIndex, setActiveIndex] = useState(0);
+    const cardsContainerRef = useRef(null);
+    const { gameList: games } = useGlobal();
 
     const nextGame = () => {
         setActiveIndex((prevIndex) => (prevIndex + 1) % games.length);
@@ -36,24 +16,30 @@ const GameCarousel = () => {
     const prevGame = () => {
         setActiveIndex((prevIndex) => (prevIndex - 1 + games.length) % games.length);
     };
+    useEffect(() => {
+        showToast.success(`Active Index: ${activeIndex}`);
+    }, [activeIndex]);
+    // Scroll to the active card when it changes
+    useEffect(() => {
+        if (cardsContainerRef.current) {
+            const cardWidth = 220; // card width + gap
+            const containerWidth = cardsContainerRef.current.clientWidth;
+            const scrollPosition = activeIndex * cardWidth - (containerWidth / 2) + (cardWidth / 2);
 
-    // Calculate indices for visible cards
-    const getVisibleIndices = () => {
-        const indices = [];
-        for (let i = -1; i <= 1; i++) {
-            indices.push((activeIndex + i + games.length) % games.length);
+            // Only scroll if there are more cards than can fit in the container
+            if (games.length * cardWidth > containerWidth) {
+                cardsContainerRef.current.scrollTo({
+                    left: scrollPosition,
+                    behavior: 'smooth'
+                });
+            }
         }
-        return indices;
-    };
+    }, [activeIndex, games.length]);
 
-    const getPositionClass = (position) => {
-        if (position === -1) return styles.positionLeft;
-        if (position === 0) return styles.positionCenter;
-        if (position === 1) return styles.positionRight;
-        return '';
+    const getPositionClass = (index) => {
+        if (index === activeIndex) return styles.positionCenter;
+        return index < activeIndex ? styles.positionLeft : styles.positionRight;
     };
-
-    const visibleIndices = getVisibleIndices();
 
     return (
         <div className={styles.gameCarouselContainer}>
@@ -62,22 +48,29 @@ const GameCarousel = () => {
                     <i className="fas fa-chevron-left"></i>
                 </button>
 
-                <div className={styles.cardsContainer}>
-                    {visibleIndices.map((index, i) => (
-                        <div
-                            key={games[index].id}
-                            className={`${styles.gameCard} ${getPositionClass(i - 1)}`}
-                            style={{ backgroundImage: `url(${games[index].image})` }}
-                        >
-                            <div className={styles.cardOverlay}></div>
-                            <div className={styles.cardGlow}></div>
-                            <div className={styles.cardContent}>
-                                <h3 className={styles.cardTitle}>{games[index].title}</h3>
-                                <div className={styles.cardPlayers}>{games[index].players}</div>
-                                <p className={styles.cardDescription}>{games[index].description}</p>
+                <div className={styles.cardsContainer} ref={cardsContainerRef}>
+                    <div className={styles.cardsWrapper}>
+                        {games.map((game, index) => (
+                            <div
+                                key={game.id}
+                                className={`${styles.gameCard} ${getPositionClass(index)}`}
+                                style={{ backgroundImage: `url(${game.img})` }}
+                                onClick={() => setActiveIndex(index)}
+                            >
+                                <div className={styles.cardOverlay}></div>
+                                <div className={styles.cardGlow}></div>
+                                <div className={styles.cardContent}>
+                                    <h3 className={styles.cardTitle}>{game.name}</h3>
+                                    <div className={styles.cardPlayers}>
+                                        {game.players.min === game.players.max
+                                            ? `${game.players.min} players`
+                                            : `${game.players.min}-${game.players.max} players`}
+                                    </div>
+                                    <p className={styles.cardDescription}>{game.description}</p>
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
 
                 <button className={`${styles.carouselButton} ${styles.right}`} onClick={nextGame}>

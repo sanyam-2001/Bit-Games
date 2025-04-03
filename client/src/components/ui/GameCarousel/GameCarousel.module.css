@@ -10,7 +10,8 @@
   overflow: hidden;
   border: 1px solid rgba(8, 247, 254, 0.2);
   box-shadow: 0 0 15px rgba(8, 247, 254, 0.1);
-  padding: 16px;
+  padding: 8px 0;
+  margin: 20px 0;
 }
 
 /* Container */
@@ -20,7 +21,8 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 280px;
+  height: 260px;
+  padding: 0 60px;
 }
 
 .cardsContainer {
@@ -30,14 +32,33 @@
   align-items: center;
   width: 100%;
   height: 100%;
-  perspective: 1000px;
+  gap: 40px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 0 20px;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  margin: 0 auto;
+}
+
+.cardsContainer::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* Add a wrapper for the cards to help with centering */
+.cardsWrapper {
+  display: flex;
+  gap: 40px;
+  margin: 0 auto;
+  justify-content: center;
+  min-width: min-content;
 }
 
 /* Game Cards */
 .gameCard {
-  position: absolute;
-  width: 220px;
-  height: 220px;
+  position: relative;
+  width: 180px;
+  height: 180px;
   border-radius: 12px;
   overflow: hidden;
   transition: all 0.5s ease;
@@ -46,6 +67,7 @@
   background-position: center;
   background-repeat: no-repeat;
   cursor: pointer;
+  flex-shrink: 0;
 }
 
 .cardOverlay {
@@ -64,20 +86,15 @@
 }
 
 .positionCenter {
-  transform: translateZ(0) scale(1);
-  z-index: 10;
   border-color: var(--neon-blue);
   box-shadow: 0 0 15px var(--neon-blue);
+  transform: scale(1.05);
+  z-index: 10;
 }
 
-.positionLeft {
-  transform: translateX(-80%) translateZ(-100px) rotateY(30deg) scale(0.8);
-  z-index: 5;
-}
-
+.positionLeft,
 .positionRight {
-  transform: translateX(80%) translateZ(-100px) rotateY(-30deg) scale(0.8);
-  z-index: 5;
+  opacity: 0.9;
 }
 
 .cardGlow {
@@ -137,7 +154,7 @@
 
 .cardTitle {
   font-family: "Share Tech Mono", monospace;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   margin: 0;
   color: white;
   text-shadow: 0 0 5px var(--neon-blue);
@@ -153,7 +170,7 @@
 }
 
 .cardPlayers {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   color: var(--neon-pink);
   margin: 0;
   text-shadow: 0 0 3px var(--neon-pink);
@@ -168,7 +185,7 @@
 }
 
 .cardDescription {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   color: rgba(255, 255, 255, 0.9);
   margin: 0;
   line-height: 1.4;
@@ -217,7 +234,7 @@
 /* Indicators */
 .gameIndicators {
   position: absolute;
-  bottom: 15px;
+  bottom: 0;
   left: 0;
   right: 0;
   display: flex;

@@ -6,10 +6,22 @@ import { setupSocketHandlers } from "./config/Socket.config.js";
 import { setupRedis } from "./config/Redis.config.js";
 import { fileURLToPath } from 'url';
 import * as dotenv from "dotenv";
+import cors from "cors";
+
 dotenv.config(); // Load environment variables from .env
 
 const app = express(); // Initialize express app
 const server = http.createServer(app);
+
+// CORS middleware to allow all origins
+app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+// Parse JSON bodies
+app.use(express.json());
 
 setupSocketHandlers(server);
 setupRedis()
