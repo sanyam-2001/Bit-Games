@@ -1,5 +1,18 @@
 /* GameCarousel.css */
 
+/* Outer Container */
+.gameCarouselContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: rgba(10, 14, 23, 0.4);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(8, 247, 254, 0.2);
+  box-shadow: 0 0 15px rgba(8, 247, 254, 0.1);
+  padding: 16px;
+}
+
 /* Container */
 .carouselContainer {
   position: relative;
@@ -7,7 +20,7 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 250px;
+  height: 280px;
 }
 
 .cardsContainer {
@@ -23,13 +36,31 @@
 /* Game Cards */
 .gameCard {
   position: absolute;
-  width: 300px;
-  height: 180px;
-  background-color: rgba(26, 29, 45, 0.7);
-  border-radius: 8px;
+  width: 220px;
+  height: 220px;
+  border-radius: 12px;
   overflow: hidden;
   transition: all 0.5s ease;
   border: 1px solid rgba(8, 247, 254, 0.2);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+.cardOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+  transition: background-color 0.3s ease;
+}
+
+.gameCard:hover .cardOverlay {
+  background-color: rgba(0, 0, 0, 0.7);
 }
 
 .positionCenter {
@@ -64,6 +95,7 @@
   opacity: 0;
   animation: pulse 3s infinite;
   transition: opacity 0.5s ease;
+  z-index: 2;
 }
 
 .positionCenter .cardGlow {
@@ -82,94 +114,133 @@
   }
 }
 
-.cardImage {
-  width: 100%;
-  height: 120px;
-  object-fit: cover;
+.cardContent {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transform: translateY(100%);
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.7));
+  border-top: 2px solid var(--neon-blue);
+  box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.5);
 }
 
-.cardContent {
-  padding: 8px;
+.gameCard:hover .cardContent {
+  transform: translateY(0);
 }
 
 .cardTitle {
   font-family: "Share Tech Mono", monospace;
-  font-size: 1.1rem;
-  margin: 0 0 4px 0;
-  color: var(--neon-blue);
+  font-size: 1.4rem;
+  margin: 0;
+  color: white;
+  text-shadow: 0 0 5px var(--neon-blue);
+  font-weight: bold;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.3s ease 0.2s, transform 0.3s ease 0.2s;
+}
+
+.gameCard:hover .cardTitle {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .cardPlayers {
-  font-size: 0.8rem;
-  margin-bottom: 4px;
-  color: var(--text-secondary);
+  font-size: 0.9rem;
+  color: var(--neon-pink);
+  margin: 0;
+  text-shadow: 0 0 3px var(--neon-pink);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.3s ease 0.3s, transform 0.3s ease 0.3s;
+}
+
+.gameCard:hover .cardPlayers {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .cardDescription {
   font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
   margin: 0;
-  color: var(--text-color);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  line-height: 1.4;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.3s ease 0.4s, transform 0.3s ease 0.4s;
 }
 
-/* Navigation Controls */
+.gameCard:hover .cardDescription {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Carousel Controls */
 .carouselButton {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: transparent;
-  border: none;
-  color: var(--text-secondary);
-  font-size: 1.5rem;
-  cursor: pointer;
-  z-index: 20;
   width: 40px;
   height: 40px;
+  border-radius: 50%;
+  background-color: rgba(10, 14, 23, 0.7);
+  border: 1px solid rgba(8, 247, 254, 0.3);
+  color: var(--neon-blue);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: color 0.3s ease;
+  cursor: pointer;
+  z-index: 20;
+  transition: all 0.3s ease;
 }
 
 .carouselButton:hover {
-  color: var(--neon-blue);
+  background-color: rgba(8, 247, 254, 0.2);
+  box-shadow: 0 0 10px var(--neon-blue);
 }
 
 .left {
-  left: 0;
+  left: 10px;
 }
 
 .right {
-  right: 0;
+  right: 10px;
 }
 
 /* Indicators */
 .gameIndicators {
-  display: flex;
-  justify-content: center;
   position: absolute;
-  bottom: -20px;
+  bottom: 15px;
   left: 0;
   right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  z-index: 20;
 }
 
 .gameIndicator {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
-  background-color: var(--text-secondary);
-  margin: 0 4px;
+  background-color: rgba(8, 247, 254, 0.3);
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .active {
   background-color: var(--neon-blue);
-  box-shadow: 0 0 8px var(--neon-blue);
+  box-shadow: 0 0 5px var(--neon-blue);
 }
 
 .gameIndicator:hover {
-  background-color: var(--neon-cyan);
+  background-color: var(--neon-blue);
+  box-shadow: 0 0 8px var(--neon-blue);
 }

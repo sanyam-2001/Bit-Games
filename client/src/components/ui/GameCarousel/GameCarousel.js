@@ -5,39 +5,25 @@ import styles from './GameCarousel.module.css';
 const games = [
     {
         id: 1,
-        title: 'Cyber Race',
-        image: 'https://via.placeholder.com/200x120/0A0E17/08F7FE?text=Cyber+Race',
-        players: '2-8 players',
+        title: 'Tic Tac Toe',
+        image: '/ticTacToe.png',
+        players: '2 players',
         description: 'High-speed futuristic racing game',
     },
     {
         id: 2,
-        title: 'Neon Fighters',
-        image: 'https://via.placeholder.com/200x120/0A0E17/FE53BB?text=Neon+Fighters',
-        players: '2-4 players',
+        title: 'Shazam',
+        image: '/shazam.png',
+        players: '2-8 players',
         description: 'Battle arena with neon weapons',
     },
     {
-        id: 3,
-        title: 'Bit Puzzle',
-        image: 'https://via.placeholder.com/200x120/0A0E17/09FBD3?text=Bit+Puzzle',
-        players: '1-2 players',
-        description: 'Mind-bending digital puzzles',
-    },
-    {
         id: 4,
-        title: 'Virtual Racer',
-        image: 'https://via.placeholder.com/200x120/0A0E17/08F7FE?text=Virtual+Racer',
-        players: '1-4 players',
+        title: 'JKLM',
+        image: '/jklm.png',
+        players: '2-8 players',
         description: 'Race in procedurally generated tracks',
-    },
-    {
-        id: 5,
-        title: 'Laser Combat',
-        image: 'https://via.placeholder.com/200x120/0A0E17/FE53BB?text=Laser+Combat',
-        players: '2-16 players',
-        description: 'Team-based laser tag simulation',
-    },
+    }
 ];
 
 const GameCarousel = () => {
@@ -70,40 +56,43 @@ const GameCarousel = () => {
     const visibleIndices = getVisibleIndices();
 
     return (
-        <div className={styles.carouselContainer}>
-            <button className={`${styles.carouselButton} ${styles.left}`} onClick={prevGame}>
-                <i className="fas fa-chevron-left"></i>
-            </button>
+        <div className={styles.gameCarouselContainer}>
+            <div className={styles.carouselContainer}>
+                <button className={`${styles.carouselButton} ${styles.left}`} onClick={prevGame}>
+                    <i className="fas fa-chevron-left"></i>
+                </button>
 
-            <div className={styles.cardsContainer}>
-                {visibleIndices.map((index, i) => (
-                    <div
-                        key={games[index].id}
-                        className={`${styles.gameCard} ${getPositionClass(i - 1)}`}
-                    >
-                        <img className={styles.cardImage} src={games[index].image} alt={games[index].title} />
-                        <div className={styles.cardGlow}></div>
-                        <div className={styles.cardContent}>
-                            <h3 className={styles.cardTitle}>{games[index].title}</h3>
-                            <div className={styles.cardPlayers}>{games[index].players}</div>
-                            <p className={styles.cardDescription}>{games[index].description}</p>
+                <div className={styles.cardsContainer}>
+                    {visibleIndices.map((index, i) => (
+                        <div
+                            key={games[index].id}
+                            className={`${styles.gameCard} ${getPositionClass(i - 1)}`}
+                            style={{ backgroundImage: `url(${games[index].image})` }}
+                        >
+                            <div className={styles.cardOverlay}></div>
+                            <div className={styles.cardGlow}></div>
+                            <div className={styles.cardContent}>
+                                <h3 className={styles.cardTitle}>{games[index].title}</h3>
+                                <div className={styles.cardPlayers}>{games[index].players}</div>
+                                <p className={styles.cardDescription}>{games[index].description}</p>
+                            </div>
                         </div>
-                    </div>
-                ))}
-            </div>
+                    ))}
+                </div>
 
-            <button className={`${styles.carouselButton} ${styles.right}`} onClick={nextGame}>
-                <i className="fas fa-chevron-right"></i>
-            </button>
+                <button className={`${styles.carouselButton} ${styles.right}`} onClick={nextGame}>
+                    <i className="fas fa-chevron-right"></i>
+                </button>
 
-            <div className={styles.gameIndicators}>
-                {games.map((game, index) => (
-                    <div
-                        key={game.id}
-                        className={`${styles.gameIndicator} ${index === activeIndex ? styles.active : ''}`}
-                        onClick={() => setActiveIndex(index)}
-                    ></div>
-                ))}
+                <div className={styles.gameIndicators}>
+                    {games.map((game, index) => (
+                        <div
+                            key={game.id}
+                            className={`${styles.gameIndicator} ${index === activeIndex ? styles.active : ''}`}
+                            onClick={() => setActiveIndex(index)}
+                        ></div>
+                    ))}
+                </div>
             </div>
         </div>
     );

@@ -65,8 +65,6 @@
 }
 
 .centerSection {
-  display: flex;
-  flex-direction: column;
   padding: var(--space-lg);
   justify-content: space-between;
   z-index: 2;
@@ -130,6 +128,8 @@
   align-items: center;
   justify-content: center;
   margin: var(--space-xl) 0;
+  width: 100%;
+  min-height: 300px;
 }
 
 .sectionHeader {
@@ -188,51 +188,50 @@
 /* Play Button */
 .playButton {
   position: relative;
-  padding: 16px 32px;
+  padding: 12px 32px;
+  background-color: rgba(8, 247, 254, 0.1);
+  border: 1px solid var(--neon-blue);
+  border-radius: 4px;
+  color: var(--neon-blue);
   font-family: "Share Tech Mono", monospace;
   font-size: 1.2rem;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 2px;
-  background: transparent;
-  border: 2px solid var(--neon-pink);
-  color: var(--neon-pink);
   cursor: pointer;
   overflow: hidden;
   transition: all 0.3s ease;
-  box-shadow: 0 0 10px rgba(254, 83, 187, 0.3);
 }
 
 .playButton:hover {
-  background-color: rgba(254, 83, 187, 0.1);
-  box-shadow: 0 0 20px rgba(254, 83, 187, 0.5);
+  background-color: rgba(8, 247, 254, 0.2);
+  box-shadow: 0 0 15px var(--neon-blue);
 }
 
 .buttonGlow {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(
-    circle at center,
-    rgba(254, 83, 187, 0.3) 0%,
-    transparent 70%
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(8, 247, 254, 0.2),
+    transparent
   );
-  opacity: 0;
-  animation: pulse 2s infinite;
+  transform: translateX(-100%);
+  animation: buttonGlow 3s infinite;
 }
 
-@keyframes pulse {
+@keyframes buttonGlow {
   0% {
-    opacity: 0;
-    transform: scale(0.8);
+    transform: translateX(-100%);
   }
   50% {
-    opacity: 0.5;
-    transform: scale(1.1);
+    transform: translateX(100%);
   }
   100% {
-    opacity: 0;
-    transform: scale(0.8);
+    transform: translateX(100%);
   }
 }

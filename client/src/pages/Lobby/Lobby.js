@@ -13,13 +13,12 @@ const Lobby = () => {
             </div>
 
             <div className={styles.centerSection}>
-
-                <div className={styles.gameSection}>
-                    <h2 className={styles.sectionHeader}>Select Game</h2>
+                <div style={{ padding: '20px' }}>
+                    {/* <h2 className={styles.sectionHeader}>Select Game</h2> */}
                     <GameCarousel />
                 </div>
 
-                <div className={styles.bottomSection}>
+                <div style={{ padding: '20px' }}>
                     <button className={styles.playButton}>
                         Start Game
                         <div className={styles.buttonGlow}></div>
