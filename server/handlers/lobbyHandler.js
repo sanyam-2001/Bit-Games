@@ -57,7 +57,26 @@ const handleCreateLobby = async (io, socket, { name: username }) => {
     }
 };
 
+const handleTogglePlayerStatus = async (io, socket, { lobbyId, playerId }) => {
+    try {
+        const lobby = await redisService.get(`LOBBY:${lobbyId}`);
+        if (!lobby) {
+            throw Error("Lobby not found");
+        }
+        const playerIndex = lobby.players.findIndex((player) => player.id === playerId);
+        if (playerIndex === -1) {
+            throw Error("Player not found");
+        }
+        lobby.players[playerIndex].status = lobby.players[playerIndex].status === "Ready" ? "Not-Ready" : "Ready";
+        await redisService.set(`LOBBY:${lobbyId}`, lobby);
+        io.in(lobbyId).emit(events.LOBBY_UPDATED, new SocketPayload(true, null, { lobby }));
+    } catch (error) {
+        console.error(error);
+    }
+}
+
 export const registerLobbyHandlers = (io, socket) => {
     socket.on(events.JOIN_LOBBY, (data) => handleJoinLobby(io, socket, data));
     socket.on(events.CREATE_LOBBY, (data) => handleCreateLobby(io, socket, data));
+    socket.on(events.TOGGLE_PLAYER_STATUS, (data) => handleTogglePlayerStatus(io, socket, data));
 };

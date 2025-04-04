@@ -67,6 +67,8 @@
 .centerSection {
   padding: var(--space-lg);
   justify-content: space-between;
+  display: flex;
+  flex-direction: column;
   z-index: 2;
   overflow: hidden;
 }
@@ -234,4 +236,13 @@
   100% {
     transform: translateX(100%);
   }
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+  margin-top: auto;
+  margin-bottom: 40px;
 }

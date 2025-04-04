@@ -21,7 +21,17 @@ const SideMenu = () => {
         setCopySuccess(true);
         setTimeout(() => setCopySuccess(false), 2000);
     };
-
+    const PlayerListComponent = players.map(player => {
+        const playerStatusClass = player?.status?.toLowerCase() || "not-ready";
+        return (
+            <li key={player.id} className={styles.playerItem}>
+                <span className={styles.playerName}>{player.name}</span>
+                <span className={`${styles.playerStatus} ${styles[playerStatusClass]}`}>
+                    {player.status}
+                </span>
+            </li>
+        )
+    })
     return (
         <div className={styles.menuContainer}>
             <div className={styles.logoSection}>
@@ -31,14 +41,7 @@ const SideMenu = () => {
             <div className={styles.sectionContainer}>
                 <h3 className={styles.sectionTitle}>Players in Lobby</h3>
                 <ul className={styles.playerList}>
-                    {players.map(player => (
-                        <li key={player.id} className={styles.playerItem}>
-                            <span className={styles.playerName}>{player.name}</span>
-                            <span className={`${styles.playerStatus} ${styles[player?.status?.toLowerCase()] || "not-ready"}`}>
-                                {player.status}
-                            </span>
-                        </li>
-                    ))}
+                    {PlayerListComponent}
                 </ul>
             </div>
 

@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styles from './GameCarousel.module.css';
 import { useGlobal } from '../../../context/GlobalContext';
-import { showToast } from '../../../utils/toast';
 // Sample game data - in a real app, this would come from an API
 
 const GameCarousel = () => {
@@ -16,9 +15,6 @@ const GameCarousel = () => {
     const prevGame = () => {
         setActiveIndex((prevIndex) => (prevIndex - 1 + games.length) % games.length);
     };
-    useEffect(() => {
-        showToast.success(`Active Index: ${activeIndex}`);
-    }, [activeIndex]);
     // Scroll to the active card when it changes
     useEffect(() => {
         if (cardsContainerRef.current) {
