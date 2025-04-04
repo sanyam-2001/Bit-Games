@@ -3,7 +3,7 @@ import styles from './Chat.module.css';
 
 // Sample messages for demonstration
 const sampleMessages = [
-    { id: 1, user: 'System', message: 'Welcome to Bit Games Lobby! Presented to you SR', timestamp: '10:00', isSystem: true },
+    { id: 1, user: 'System', message: 'Welcome to Bit Games Lobby! Presented to you SR', timestamp: '10:00', isSystem: true }
 ];
 
 const Chat = () => {
@@ -44,7 +44,7 @@ const Chat = () => {
                     <div className={styles.headerGlow}></div>
                 </div>
             </div>
-            
+
             <div className={styles.messageList}>
                 {messages.map((msg) => (
                     <div
