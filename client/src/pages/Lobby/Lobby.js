@@ -1,12 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './Lobby.module.css';
-import { SideMenu, GameCarousel, Chat } from '../../components/ui';
+import { SideMenu, GameCarousel, Chat, PrimaryButton, SecondaryButton } from '../../components/ui';
 import { useSocket } from '../../context/SocketContext';
 import { SocketEvents } from '../../enums/socketevents.enums';
 import { useGlobal } from '../../context/GlobalContext';
 const Lobby = () => {
     const { socket, connected } = useSocket();
     const { setLobby } = useGlobal();
+    const [isReady, setIsReady] = useState(false);
     useEffect(() => {
         if (connected && socket) {
             socket.on(SocketEvents.USER_JOINED_LOBBY, ({ success, error, data }) => {
@@ -20,6 +21,9 @@ const Lobby = () => {
             }
         };
     }, [socket, setLobby, connected]);
+    const handleReadyToggle = () => {
+        setIsReady(!isReady);
+    }
     return (
         <div className={styles.lobbyContainer}>
             <div className={styles.glowOverlay}></div>
@@ -35,11 +39,9 @@ const Lobby = () => {
                     <GameCarousel />
                 </div>
 
-                <div style={{ padding: '20px' }}>
-                    <button className={styles.playButton}>
-                        Start Game
-                        <div className={styles.buttonGlow}></div>
-                    </button>
+                <div className={styles.buttonContainer}>
+                    <PrimaryButton>Start Game</PrimaryButton>
+                    <SecondaryButton onClick={handleReadyToggle}>{isReady ? "Unready" : "Ready"}</SecondaryButton>
                 </div>
             </div>
 
