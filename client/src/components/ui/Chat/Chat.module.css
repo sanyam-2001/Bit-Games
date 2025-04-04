@@ -6,16 +6,53 @@
   flex-direction: column;
   height: 100%;
   background-color: rgba(10, 14, 23, 0.4);
-  border-radius: 8px;
+  border-radius: 12px;
   overflow: hidden;
   border: 1px solid rgba(254, 83, 187, 0.2);
+  box-shadow: 0 0 20px rgba(254, 83, 187, 0.1), inset 0 0 30px rgba(10, 14, 23, 0.5);
+  backdrop-filter: blur(5px);
+  max-height: 100vh;
 }
 
 /* Header */
 .chatHeader {
   display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: rgba(10, 14, 23, 0.8);
   border-bottom: 1px solid rgba(254, 83, 187, 0.3);
+  padding: 12px 0;
+  position: relative;
+}
+
+.headerContent {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.chatTitle {
+  margin: 0;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 1.3rem;
+  color: var(--neon-pink);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  padding: 0 20px;
+  text-shadow: 0 0 5px var(--neon-pink), 0 0 10px rgba(254, 83, 187, 0.5);
+  z-index: 1;
+}
+
+.headerGlow {
+  position: absolute;
+  height: 1px;
+  width: 80%;
+  bottom: -8px;
+  background: linear-gradient(90deg, transparent, var(--neon-pink), transparent);
+  box-shadow: 0 0 10px var(--neon-pink);
+  opacity: 0.7;
+  animation: glow-pulse 3s infinite;
 }
 
 .tabButton {
@@ -66,44 +103,76 @@
   font-size: 0.8rem;
 }
 
-/* Message List */
+/* Message List - improved scrolling behavior */
 .messageList {
   flex: 1;
   padding: 16px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
+  background: linear-gradient(180deg, rgba(10, 14, 23, 0.2) 0%, rgba(10, 14, 23, 0.4) 100%);
+  /* Ensure scrolling happens within this container */
+  height: 100%; /* Critical for flex child scrolling */
+  min-height: 0; /* Important for flex child scrolling */
+  scrollbar-width: thin; /* For Firefox */
+  scrollbar-color: rgba(41, 121, 255, 0.5) rgba(10, 14, 23, 0.5); /* For Firefox */
 }
 
-/* Custom Scrollbar */
+/* Custom Scrollbar - Enhanced with neon blue effect */
 .messageList::-webkit-scrollbar,
 .usersList::-webkit-scrollbar {
-  width: 6px;
+  width: 8px; /* Slightly wider for better visibility */
 }
 
 .messageList::-webkit-scrollbar-track,
 .usersList::-webkit-scrollbar-track {
-  background: rgba(10, 14, 23, 0.3);
+  background: rgba(10, 14, 23, 0.5);
+  border-radius: 4px;
 }
 
 .messageList::-webkit-scrollbar-thumb,
 .usersList::-webkit-scrollbar-thumb {
-  background: rgba(254, 83, 187, 0.3);
-  border-radius: 3px;
+  background: rgba(41, 121, 255, 0.5); /* Neon blue base */
+  border-radius: 4px;
+  box-shadow: 0 0 6px rgba(41, 121, 255, 0.8), inset 0 0 10px rgba(41, 121, 255, 0.3);
+  border: 1px solid rgba(41, 121, 255, 0.8);
+  animation: scrollbar-glow 2s infinite;
+}
+
+.messageList::-webkit-scrollbar-thumb:hover,
+.usersList::-webkit-scrollbar-thumb:hover {
+  background: rgba(41, 121, 255, 0.7); /* Brighter on hover */
+  box-shadow: 0 0 10px rgba(41, 121, 255, 1), inset 0 0 15px rgba(41, 121, 255, 0.5);
+}
+
+/* Add animation for the scrollbar glow effect */
+@keyframes scrollbar-glow {
+  0% {
+    box-shadow: 0 0 5px rgba(41, 121, 255, 0.5), inset 0 0 10px rgba(41, 121, 255, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 10px rgba(41, 121, 255, 0.9), inset 0 0 15px rgba(41, 121, 255, 0.6);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(41, 121, 255, 0.5), inset 0 0 10px rgba(41, 121, 255, 0.3);
+  }
 }
 
 /* Message Items */
 .messageItem {
   position: relative;
-  padding: 8px;
-  background-color: rgba(26, 29, 45, 0.6);
-  border-radius: 8px;
+  padding: 10px 12px;
+  background-color: rgba(26, 29, 45, 0.7);
+  border-radius: 10px;
   margin-left: 0;
   margin-right: auto;
+  min-height: fit-content;
   max-width: 85%;
   overflow: hidden;
   border-left: 2px solid var(--neon-blue);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
 }
 
 .system {
@@ -185,27 +254,27 @@
 /* Chat Input */
 .chatInputForm {
   display: flex;
-  padding: 8px;
+  padding: 12px;
   background-color: rgba(10, 14, 23, 0.8);
   border-top: 1px solid rgba(254, 83, 187, 0.3);
 }
 
 .chatInput {
   flex: 1;
-  padding: 8px 16px;
-  background-color: rgba(26, 29, 45, 0.6);
+  padding: 10px 16px;
+  background-color: rgba(26, 29, 45, 0.7);
   border: 1px solid rgba(254, 83, 187, 0.3);
-  border-radius: 8px;
+  border-radius: 20px;
   color: var(--text-color);
   font-family: "Rajdhani", sans-serif;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   transition: all 0.3s ease;
 }
 
 .chatInput:focus {
   outline: none;
   border-color: var(--neon-pink);
-  box-shadow: 0 0 8px rgba(254, 83, 187, 0.3);
+  box-shadow: 0 0 12px rgba(254, 83, 187, 0.4);
 }
 
 .chatInput::placeholder {
@@ -213,11 +282,11 @@
 }
 
 .sendButton {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   margin-left: 8px;
-  background-color: rgba(254, 83, 187, 0.1);
-  border: 1px solid rgba(254, 83, 187, 0.3);
+  background-color: rgba(254, 83, 187, 0.15);
+  border: 1px solid rgba(254, 83, 187, 0.4);
   border-radius: 50%;
   color: var(--neon-pink);
   display: flex;
@@ -225,11 +294,13 @@
   justify-content: center;
   cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: 0 0 5px rgba(254, 83, 187, 0.2);
 }
 
 .sendButton:hover {
-  background-color: rgba(254, 83, 187, 0.2);
-  box-shadow: 0 0 10px rgba(254, 83, 187, 0.5);
+  background-color: rgba(254, 83, 187, 0.25);
+  box-shadow: 0 0 15px rgba(254, 83, 187, 0.6);
+  transform: translateY(-2px);
 }
 
 /* Users List */
