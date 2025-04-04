@@ -6,23 +6,32 @@ import { SocketEvents } from '../../enums/socketevents.enums';
 import { useGlobal } from '../../context/GlobalContext';
 const Lobby = () => {
     const { socket, connected } = useSocket();
-    const { setLobby } = useGlobal();
+    const { lobby, setLobby, currentUser } = useGlobal();
     const [isReady, setIsReady] = useState(false);
     useEffect(() => {
         if (connected && socket) {
             socket.on(SocketEvents.USER_JOINED_LOBBY, ({ success, error, data }) => {
-                const { lobby } = data;
-                setLobby(lobby);
+                setLobby(data?.lobby);
+            });
+            socket.on(SocketEvents.LOBBY_UPDATED, ({ success, error, data }) => {
+                console.log(data.lobby)
+                setLobby(data?.lobby);
             });
         }
         return () => {
             if (socket) {
                 socket.off(SocketEvents.USER_JOINED_LOBBY);
+                socket.off(SocketEvents.LOBBY_UPDATED);
             }
         };
     }, [socket, setLobby, connected]);
     const handleReadyToggle = () => {
-        setIsReady(!isReady);
+        if (socket) {
+            socket.emit(SocketEvents.TOGGLE_PLAYER_STATUS, {
+                lobbyId: lobby?.id,
+                playerId: currentUser?.id
+            });
+        }
     }
     return (
         <div className={styles.lobbyContainer}>
