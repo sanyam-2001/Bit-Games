@@ -1,11 +1,13 @@
 import { SocketEvents as events } from "../enums/SocketEvents.enum.js";
-import { generateLobbyId } from "../utils/LobbyUtils.js";
+import { generateLobbyId, getSystemUser } from "../utils/LobbyUtils.js";
 import Lobby from "../Models/Lobby.model.js";
 import Player from "../Models/Player.model.js";
 import { GameId } from "../enums/GameId.enum.js";
 import redisService from "../services/Redis.service.js";
 import { v4 as uuid } from "uuid";
 import SocketPayload from "../Models/SocketPayload.model.js";
+import ChatMessage from "../Models/ChatMessage.model.js";
+
 
 const handleJoinLobby = async (io, socket, { name, lobbyId }) => {
     try {
@@ -21,7 +23,10 @@ const handleJoinLobby = async (io, socket, { name, lobbyId }) => {
         }
         socket.join(lobbyId);
         socket.emit(events.ENTER_LOBBY, new SocketPayload(true, null, { lobby, newPlayer }));
+
+        const newChatMessage = new ChatMessage (uuid(), getSystemUser(), newPlayer.name+ " joined the lobby!");
         io.in(lobbyId).emit(events.USER_JOINED_LOBBY, new SocketPayload(true, null, { lobby, newPlayer }));
+        io.in(lobbyId).emit(events.RECEIVE_CHAT_MESSAGE,  new SocketPayload(true, null, newChatMessage));
     }
     catch (error) {
         console.error(error);
