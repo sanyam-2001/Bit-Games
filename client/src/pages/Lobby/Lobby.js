@@ -18,6 +18,7 @@ const Lobby = () => {
                 setLobby(data?.lobby);
             });
         }
+
         return () => {
             if (socket) {
                 socket.off(SocketEvents.USER_JOINED_LOBBY);
