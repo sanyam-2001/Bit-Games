@@ -5,11 +5,15 @@ import { useSocket } from '../../context/SocketContext';
 import { SocketEvents } from '../../enums/socketevents.enums';
 import { useGlobal } from '../../context/GlobalContext';
 import { useNavigator } from '../../utils/navigator';
+import { PlayerStatus } from '../../enums/PlayerStatus.enum';
 
 const Lobby = () => {
     const { socket, connected } = useSocket();
     const { lobby, setLobby, currentUser } = useGlobal();
-    const isReady = lobby?.players?.find(player => player.id === currentUser?.id)?.status === 'Ready' || false;
+    const isReady = lobby?.players?.find(player => player.id === currentUser?.id)?.status === PlayerStatus.READY || false;
+    const amIAdmin = lobby?.admin === currentUser?.id;
+    const isEveryoneReady = lobby?.players?.every(player => player.status === PlayerStatus.READY);
+
     const navigate = useNavigator();
     // If Lobby is null or lobby.id is null, redirect the page to /home
     useEffect(() => {
@@ -23,7 +27,6 @@ const Lobby = () => {
                 setLobby(data?.lobby);
             });
             socket.on(SocketEvents.LOBBY_UPDATED, ({ success, error, data }) => {
-                console.log(data.lobby)
                 setLobby(data?.lobby);
             });
         }
@@ -43,6 +46,11 @@ const Lobby = () => {
             });
         }
     }
+    const handleStartGame = () => {
+        if (socket) {
+            console.log("Starting game");
+        }
+    }
     return (
         <div className={styles.lobbyContainer}>
             <div className={styles.glowOverlay}></div>
@@ -59,7 +67,7 @@ const Lobby = () => {
                 </div>
 
                 <div className={styles.buttonContainer}>
-                    <PrimaryButton>Start Game</PrimaryButton>
+                    {amIAdmin && <PrimaryButton disabled={!isEveryoneReady} onClick={handleStartGame}>Start Game</PrimaryButton>}
                     <SecondaryButton onClick={handleReadyToggle}>{isReady ? "Unready" : "Ready"}</SecondaryButton>
                 </div>
             </div>
