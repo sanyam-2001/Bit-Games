@@ -1,4 +1,3 @@
-import { timelog } from "../utils/LoggingUtils.js";
 import { SocketEvents as events } from "../enums/SocketEvents.enum.js";
 import { generateLobbyId } from "../utils/LobbyUtils.js";
 import Lobby from "../Models/Lobby.model.js";

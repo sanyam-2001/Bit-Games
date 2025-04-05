@@ -1,6 +1,8 @@
 import { Server } from 'socket.io';
 import { timelog } from '../utils/LoggingUtils.js';
 import { registerLobbyHandlers } from '../handlers/lobbyHandler.js';
+import { registerChatHandlers } from '../handlers/chatHandler.js';
+
 export const setupSocketHandlers = (server) => {
     const io = new Server(server, {
         cors: {
@@ -14,6 +16,7 @@ export const setupSocketHandlers = (server) => {
 
         // Handle And Create room
         registerLobbyHandlers(io, socket);
+        registerChatHandlers(io, socket);
 
         socket.on('disconnect', () => {
             timelog(`Client disconnected: ${socket.id}`);
