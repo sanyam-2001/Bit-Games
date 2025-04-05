@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from './SideMenu.module.css';
 import { useGlobal } from '../../../context/GlobalContext';
+import { PlayerStatus } from '../../../enums/PlayerStatus.enum';
 
 const SideMenu = () => {
     const { lobby } = useGlobal();
@@ -22,7 +23,7 @@ const SideMenu = () => {
         setTimeout(() => setCopySuccess(false), 2000);
     };
     const PlayerListComponent = players.map(player => {
-        const playerStatusClass = player?.status?.toLowerCase() || "not-ready";
+        const playerStatusClass = player?.status?.toLowerCase() || PlayerStatus.NOT_READY.toLowerCase();
         return (
             <li key={player.id} className={styles.playerItem}>
                 <span className={styles.playerName}>{player.name}</span>

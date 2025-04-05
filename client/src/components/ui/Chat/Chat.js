@@ -60,9 +60,7 @@ const Chat = () => {
 
     const messageListMap = messages.map((msg) => {
         const isCurrentUser = msg?.sender?.id === currentUser?.id;
-        const isSystemMsg = false;
-       const isCurrentUser = msg.sender.id == currentUser.id;
-       const isSystemMsg = msg.sender.id == 1; 
+        const isSystemMsg = msg?.sender?.id === 1;
 
         return (
             <div
