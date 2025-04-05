@@ -5,17 +5,17 @@ import { SocketEvents as events } from '../../../enums/socketevents.enums';
 import { v4 as uuid } from "uuid";
 import { useGlobal } from '../../../context/GlobalContext';
 
-const sampleMessages = [
-    { id: 1, user: 'System', message: 'Welcome to Bit Games Lobby! Presented to you SR', timestamp: '10:00', isSystem: true }
-];
 
+const starterMessage = [
+    { id: -1, sender: { id: -1, name: 'System' }, message: 'Welcome to Bit Games Lobby!', timestamp: Date.now().toLocaleString("en-US", { hour: '2-digit', minute: '2-digit', hour12: false }) }
+];
 const Chat = () => {
-    const [messages, setMessages] = useState([]);
+    const [messages, setMessages] = useState(starterMessage);
     const [newMessage, setNewMessage] = useState('');
     const { socket, connected } = useSocket();
 
     const messagesEndRef = useRef(null);
-    const {currentUser, lobby} = useGlobal();
+    const { currentUser, lobby } = useGlobal();
 
     // Scroll to bottom whenever messages change
     const scrollToBottom = () => {
@@ -27,10 +27,10 @@ const Chat = () => {
     }, [messages]);
 
     useEffect(() => {
-        if (connected && socket){
+        if (connected && socket) {
             socket.on(events.RECEIVE_CHAT_MESSAGE, ({ success, error, data }) => {
-                console.log("Message Received:" , data);
-                setMessages((prev)=>{
+                console.log("Message Received:", data);
+                setMessages((prev) => {
                     return [...prev, data];
                 });
 
@@ -42,7 +42,7 @@ const Chat = () => {
                 socket.off(events.RECEIVE_CHAT_MESSAGE);
             }
         };
-    },[socket]);
+    }, [socket, connected]);
 
     const handleSendMessage = (e) => {
         e.preventDefault();
@@ -55,30 +55,31 @@ const Chat = () => {
         };
 
         socket.emit(events.SEND_CHAT_MESSAGE, { message, lobbyId: lobby.id });
+        setNewMessage('');
     };
 
     const messageListMap = messages.map((msg) => {
-       const isCurrentUser = msg.sender.id == currentUser.id;
-       const isSystemMsg = false; 
+        const isCurrentUser = msg?.sender?.id === currentUser?.id;
+        const isSystemMsg = false;
 
-       return (
-       <div
-            key={msg.id}
-            className={`${styles.messageItem} ${isSystemMsg ? styles.system : ''} ${isCurrentUser? styles.currentUser : ''}`}
-        >
-            {isSystemMsg ? (
-                <p className={styles.systemMessage}>{msg.message}</p>
-            ) : (
-                <>
-                    <div className={styles.messageHeader}>
-                        <span className={styles.username}>{msg.sender.name}</span>
-                        <span className={styles.timestamp}>{msg.formattedTimestamp}</span>
-                    </div>
-                    <p className={styles.messageContent}>{msg.message}</p>
-                </>
-            )}
-            <div className={styles.messageGlow}></div>
-        </div>)
+        return (
+            <div
+                key={msg.id}
+                className={`${styles.messageItem} ${isSystemMsg ? styles.system : ''} ${isCurrentUser ? styles.currentUser : ''}`}
+            >
+                {isSystemMsg ? (
+                    <p className={styles.systemMessage}>{msg.message}</p>
+                ) : (
+                    <>
+                        <div className={styles.messageHeader}>
+                            <span className={styles.username}>{msg.sender.name}</span>
+                            <span className={styles.timestamp}>{msg.formattedTimestamp}</span>
+                        </div>
+                        <p className={styles.messageContent}>{msg.message}</p>
+                    </>
+                )}
+                <div className={styles.messageGlow}></div>
+            </div>)
     });
 
     return (
