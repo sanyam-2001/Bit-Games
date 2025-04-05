@@ -112,6 +112,8 @@
 /* Message List - improved scrolling behavior */
 .messageList {
   flex: 1;
+  width: 100%;
+  align-items: center;
   padding: 16px;
   overflow-y: auto;
   display: flex;
@@ -185,11 +187,24 @@
   border-left: 2px solid var(--neon-blue);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
+  min-width: 50%;
 }
 
 .system {
-  background-color: rgba(9, 251, 211, 0.05);
-  border-left-color: var(--neon-cyan);
+  background-color: transparent;
+  border-left: none;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0;
+  padding: 0;
+  width: 100%;
+}
+
+/* Hide the glow effect for system messages */
+.system .messageGlow {
+  display: none;
 }
 
 .currentUser {
@@ -258,9 +273,33 @@
 .systemMessage {
   margin: 0;
   font-size: 0.9rem;
-  color: var(--neon-cyan);
-  font-style: italic;
+  color: #8b8b8b;
+  font-style: normal;
   text-align: center;
+  position: relative;
+  display: inline-block;
+  padding: 0 15px;
+  width: 85%;
+  max-width: 500px;
+}
+
+.systemMessage::before,
+.systemMessage::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  height: 1px;
+  width: 100px;
+  background: linear-gradient(to right, transparent, #8b8b8b 30%, #8b8b8b 70%, transparent);
+  opacity: 0.8;
+}
+
+.systemMessage::before {
+  right: 100%;
+}
+
+.systemMessage::after {
+  left: 100%;
 }
 
 /* Chat Input */

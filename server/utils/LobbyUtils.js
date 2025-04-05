@@ -1,3 +1,5 @@
+import Player from "../Models/Player.model.js";
+
 export const generateLobbyId = () => {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let code = '';
@@ -7,3 +9,7 @@ export const generateLobbyId = () => {
     return code;
 };
 
+export const getSystemUser = () => {
+    const newPlayer = new Player(1, "System");
+    return newPlayer;
+}
