@@ -2,6 +2,9 @@ import { Server } from 'socket.io';
 import { timelog } from '../utils/LoggingUtils.js';
 import { registerLobbyHandlers } from '../handlers/lobbyHandler.js';
 import { registerChatHandlers } from '../handlers/chatHandler.js';
+import { SocketEvents } from '../enums/SocketEvents.enum.js';
+import redisService from '../services/Redis.service.js';
+import SocketPayload from '../Models/SocketPayload.model.js';
 
 export const setupSocketHandlers = (server) => {
     const io = new Server(server, {
@@ -18,7 +21,23 @@ export const setupSocketHandlers = (server) => {
         registerLobbyHandlers(io, socket);
         registerChatHandlers(io, socket);
 
-        socket.on('disconnect', () => {
+        socket.on('disconnect', async () => {
+            const response = await redisService.get(`SOCKET:${socket.id}`);
+            if (!response) {
+                timelog(`Client disconnection Error: ${socket.id}`);
+                return;
+            }
+            const { lobbyId, playerId: leavingPlayersId } = response;
+
+            const lobby = await redisService.get(`LOBBY:${lobbyId}`);
+            lobby.players = lobby.players.filter(player => player.id !== leavingPlayersId);
+            if (lobby.players.length > 0 && lobby.admin === leavingPlayersId) {
+                lobby.admin = lobby.players[0].id;
+            }
+            await redisService.delete(`SOCKET:${socket.id}`);
+            await redisService.set(`LOBBY:${lobbyId}`, lobby);
+
+            io.to(lobbyId).emit(SocketEvents.LOBBY_UPDATED, new SocketPayload(true, null, { lobby }));
             timelog(`Client disconnected: ${socket.id}`);
         });
     });

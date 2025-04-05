@@ -18,15 +18,16 @@ const handleJoinLobby = async (io, socket, { name, lobbyId }) => {
         const newPlayer = new Player(uuid(), name);
         lobby.players.push(newPlayer);
         const response = await redisService.set(`LOBBY:${lobbyId}`, lobby);
+        await redisService.set(`SOCKET:${socket.id}`, { lobbyId, playerId: newPlayer.id });
         if (!response) {
             throw Error("Lobby join failed");
         }
         socket.join(lobbyId);
         socket.emit(events.ENTER_LOBBY, new SocketPayload(true, null, { lobby, newPlayer }));
 
-        const newChatMessage = new ChatMessage (uuid(), getSystemUser(), newPlayer.name+ " joined the lobby!");
+        const newChatMessage = new ChatMessage(uuid(), getSystemUser(), newPlayer.name + " joined the lobby!");
         io.in(lobbyId).emit(events.USER_JOINED_LOBBY, new SocketPayload(true, null, { lobby, newPlayer }));
-        io.in(lobbyId).emit(events.RECEIVE_CHAT_MESSAGE,  new SocketPayload(true, null, newChatMessage));
+        io.in(lobbyId).emit(events.RECEIVE_CHAT_MESSAGE, new SocketPayload(true, null, newChatMessage));
     }
     catch (error) {
         console.error(error);
@@ -44,7 +45,7 @@ const handleCreateLobby = async (io, socket, { name: username }) => {
         const lobby = new Lobby(lobbyId, [newPlayer], newPlayer.id, GameId.NO_GAME);
 
         const response = await redisService.set(`LOBBY:${lobbyId}`, lobby);
-
+        await redisService.set(`SOCKET:${socket.id}`, { lobbyId, playerId: newPlayer.id });
         if (!response) {
             throw Error("Lobby creation failed");
         }
