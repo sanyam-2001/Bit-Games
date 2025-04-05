@@ -1,13 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styles from './Lobby.module.css';
 import { SideMenu, GameCarousel, Chat, PrimaryButton, SecondaryButton } from '../../components/ui';
 import { useSocket } from '../../context/SocketContext';
 import { SocketEvents } from '../../enums/socketevents.enums';
 import { useGlobal } from '../../context/GlobalContext';
+import { useNavigator } from '../../utils/navigator';
+
 const Lobby = () => {
     const { socket, connected } = useSocket();
     const { lobby, setLobby, currentUser } = useGlobal();
-    const [isReady, setIsReady] = useState(false);
+    const isReady = lobby?.players?.find(player => player.id === currentUser?.id)?.status === 'Ready' || false;
+    const navigate = useNavigator();
+    // If Lobby is null or lobby.id is null, redirect the page to /home
+    useEffect(() => {
+        if (!lobby || !lobby.id) {
+            navigate('/home');
+        }
+    }, [lobby, navigate]);
     useEffect(() => {
         if (connected && socket) {
             socket.on(SocketEvents.USER_JOINED_LOBBY, ({ success, error, data }) => {
