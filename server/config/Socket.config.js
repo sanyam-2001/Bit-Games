@@ -24,7 +24,7 @@ export const setupSocketHandlers = (server) => {
         socket.on('disconnect', async () => {
             const response = await redisService.get(`SOCKET:${socket.id}`);
             if (!response) {
-                timelog(`Client disconnection Error: ${socket.id}`);
+                timelog(`Client disconnection Error[No Socket Lobby Pair Found]: ${socket.id}`);
                 return;
             }
             const { lobbyId, playerId: leavingPlayersId } = response;

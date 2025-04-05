@@ -5,7 +5,7 @@ import { io } from "socket.io-client";
 const SocketContext = createContext(null);
 
 // Socket.io connection URL - in development it connects to the backend server
-const SOCKET_URL = "http://localhost:5001";
+const SOCKET_URL = window.location.origin.includes('render') ? window.location.origin : 'http://localhost:5001';
 
 export const SocketProvider = ({ children }) => {
     const [socket, setSocket] = useState(null);
