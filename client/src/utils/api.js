@@ -1,7 +1,7 @@
 import { showToast } from './toast';
 
 // Base URL for API requests
-const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
+const BASE_URL = window.location.origin.includes('render') ? window.location.origin : 'http://localhost:5001';
 
 // Default request configuration
 const defaultConfig = {
