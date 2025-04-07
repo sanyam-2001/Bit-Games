@@ -94,7 +94,7 @@ const VoiceChat = () => {
     }, [createPeerConnection, socket, lobby.id]);
 
     const handleReceiveOffer = useCallback(async (data) => {
-        const { offer, senderId, receiverId } = data;
+        const { offer, senderId } = data;
 
         if (peers.current[senderId]) {
             return;
@@ -108,6 +108,9 @@ const VoiceChat = () => {
             const answer = await peer.peerConnection.createAnswer();
             await peer.peerConnection.setLocalDescription(answer);
 
+            // Process any pending candidates after setting remote description
+            await peer.processPendingCandidates();
+
             socket.emit(SocketEvents.SEND_ANSWER, {
                 answer,
                 receiverId: senderId,
@@ -119,20 +122,6 @@ const VoiceChat = () => {
         }
     }, [createPeerConnection, socket, currentUser.id, lobby.id]);
 
-    const handleReceiveAnswer = useCallback(async (data) => {
-        const { answer, senderId } = data;
-
-        if (peers.current[senderId]) {
-            try {
-                await peers.current[senderId].peerConnection.setRemoteDescription(
-                    new RTCSessionDescription(answer)
-                );
-            } catch (error) {
-                console.error('Error setting remote description:', error);
-            }
-        }
-    }, []);
-
     const handleReceiveIceCandidate = useCallback(async (data) => {
         const { candidate, senderId } = data;
 
@@ -142,7 +131,24 @@ const VoiceChat = () => {
                     new RTCIceCandidate(candidate)
                 );
             } catch (error) {
-                console.error('Error adding ice candidate:', error);
+                // If adding ICE candidate fails, add it to the queue
+                peers.current[senderId].addPendingCandidate(candidate);
+            }
+        }
+    }, []);
+
+    const handleReceiveAnswer = useCallback(async (data) => {
+        const { answer, senderId } = data;
+
+        if (peers.current[senderId]) {
+            try {
+                await peers.current[senderId].peerConnection.setRemoteDescription(
+                    new RTCSessionDescription(answer)
+                );
+                // After setting remote description, process any pending candidates
+                await peers.current[senderId].processPendingCandidates();
+            } catch (error) {
+                console.error('Error setting remote description:', error);
             }
         }
     }, []);

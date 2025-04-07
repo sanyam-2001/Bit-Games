@@ -28,5 +28,23 @@ export class Peer {
         this.peerConnection = peerConnection;
         this.pendingCandidates = [];
     }
+
+    addPendingCandidate(candidate) {
+        this.pendingCandidates.push(candidate);
+    }
+
+    async processPendingCandidates() {
+        while (this.pendingCandidates.length > 0) {
+            const candidate = this.pendingCandidates.shift();
+            try {
+                await this.peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+            } catch (error) {
+                console.error('Error processing pending candidate:', error);
+                // Put the candidate back in the queue if it fails
+                this.pendingCandidates.unshift(candidate);
+                break;
+            }
+        }
+    }
 }
 
