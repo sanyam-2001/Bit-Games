@@ -6,7 +6,7 @@ import { SocketEvents } from '../../enums/socketevents.enums';
 import { useGlobal } from '../../context/GlobalContext';
 import { useNavigator } from '../../utils/navigator';
 import { PlayerStatus } from '../../enums/PlayerStatus.enum';
-
+import VoiceChat from '../../components/VoiceChat/VoiceChat';
 const Lobby = () => {
     const { socket, connected } = useSocket();
     const { lobby, setLobby, currentUser } = useGlobal();
@@ -69,6 +69,7 @@ const Lobby = () => {
                 <div className={styles.buttonContainer}>
                     {amIAdmin && <PrimaryButton disabled={!isEveryoneReady} onClick={handleStartGame}>Start Game</PrimaryButton>}
                     <SecondaryButton onClick={handleReadyToggle}>{isReady ? "Unready" : "Ready"}</SecondaryButton>
+                    <VoiceChat />
                 </div>
             </div>
 

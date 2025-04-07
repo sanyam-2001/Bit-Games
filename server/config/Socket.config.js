@@ -5,6 +5,7 @@ import { registerChatHandlers } from '../handlers/chatHandler.js';
 import { SocketEvents } from '../enums/SocketEvents.enum.js';
 import redisService from '../services/Redis.service.js';
 import SocketPayload from '../Models/SocketPayload.model.js';
+import { registerVoiceHandlers } from '../handlers/voiceHandlers.js';
 
 export const setupSocketHandlers = (server) => {
     const io = new Server(server, {
@@ -20,6 +21,7 @@ export const setupSocketHandlers = (server) => {
         // Handle And Create room
         registerLobbyHandlers(io, socket);
         registerChatHandlers(io, socket);
+        registerVoiceHandlers(io, socket);
 
         socket.on('disconnect', async () => {
             const response = await redisService.get(`SOCKET:${socket.id}`);
