@@ -20,3 +20,13 @@ export const getPeerConnectionConfig = () => {
     };
 };
 
+
+export class Peer {
+    constructor(socketId, userId, peerConnection) {
+        this.peerSocketId = socketId;
+        this.peerUserId = userId;
+        this.peerConnection = peerConnection;
+        this.pendingCandidates = [];
+    }
+}
+
