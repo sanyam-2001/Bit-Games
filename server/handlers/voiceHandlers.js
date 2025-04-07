@@ -6,55 +6,73 @@ const voiceLobbies = {};
 const handleJoinVoiceRequest = (io, socket, data) => {
     const { lobbyId, userId } = data;
     timelog(`User ${socket.id} requested to join voice chat for lobby ${lobbyId}`);
-    // First Time Created
+
     if (!voiceLobbies[lobbyId]) {
-        voiceLobbies[lobbyId] = [];
-    }
-    if (!voiceLobbies[lobbyId].some(user => user.userId === userId)) {
-        voiceLobbies[lobbyId].push({
-            userId: userId,
-            socketId: socket.id
-        });
+        voiceLobbies[lobbyId] = new Set();
     }
 
-    //Notify Existing Users that new user has joined
-    // socket.to(lobbyId).emit(SocketEvents.NEW_VOICE_USER_JOINED, {
-    //     userId,
-    //     socketId: socket.id
-    // });
+    voiceLobbies[lobbyId].add(socket.id);
 
-    // Send List of Current Users in Voice Chat to the new user
-    voiceLobbies[lobbyId].forEach(user => {
-        if (user.userId !== userId) {
-            socket.emit(SocketEvents.EXISTING_VOICE_USER_JOINED, {
-                userId: user.id,
-                socketId: user.socketId
-            });
-        }
+    socket.to(lobbyId).emit(SocketEvents.NEW_VOICE_USER_JOINED, {
+        userId,
+        socketId: socket.id
+    });
+
+    const existingUsers = Array.from(voiceLobbies[lobbyId])
+        .filter(id => id !== socket.id)
+        .map(id => ({
+            socketId: id,
+            userId: userId
+        }));
+
+    existingUsers.forEach(user => {
+        socket.emit(SocketEvents.EXISTING_VOICE_USER_JOINED, user);
     });
 }
 
 const handleSendIceCandidate = (io, socket, data) => {
-
-    const { candidate, receiverId } = data;
+    const { candidate, receiverId, lobbyId } = data;
     io.to(receiverId).emit(SocketEvents.RECEIVE_ICE_CANDIDATE, {
         candidate,
-        senderId: socket.id
+        senderId: socket.id,
+        lobbyId
     });
 }
 
 const handleSendOffer = (io, socket, data) => {
     const { offer, receiverId, senderId, lobbyId } = data;
-    console.log(`Sending Offer From ${senderId} to ${receiverId}`);
+    timelog(`Sending Offer From ${senderId} to ${receiverId} in lobby ${lobbyId}`);
 
     io.to(receiverId).emit(SocketEvents.RECEIVE_OFFER, {
         offer,
-        senderId: socket.id
+        senderId: socket.id,
+        receiverId,
+        lobbyId
     });
 }
 
 const handleSendAnswer = (io, socket, data) => {
+    const { answer, receiverId, senderId, lobbyId } = data;
+    timelog(`Sending Answer From ${senderId} to ${receiverId} in lobby ${lobbyId}`);
 
+    io.to(receiverId).emit(SocketEvents.RECEIVE_ANSWER, {
+        answer,
+        senderId: socket.id,
+        receiverId,
+        lobbyId
+    });
+}
+
+const handleDisconnect = (io, socket) => {
+    Object.entries(voiceLobbies).forEach(([lobbyId, users]) => {
+        if (users.has(socket.id)) {
+            users.delete(socket.id);
+            io.to(lobbyId).emit(SocketEvents.VOICE_USER_LEFT, {
+                socketId: socket.id,
+                lobbyId
+            });
+        }
+    });
 }
 
 export const registerVoiceHandlers = (io, socket) => {
@@ -62,4 +80,5 @@ export const registerVoiceHandlers = (io, socket) => {
     socket.on(SocketEvents.SEND_ICE_CANDIDATE, (data) => handleSendIceCandidate(io, socket, data));
     socket.on(SocketEvents.SEND_OFFER, (data) => handleSendOffer(io, socket, data));
     socket.on(SocketEvents.SEND_ANSWER, (data) => handleSendAnswer(io, socket, data));
+    socket.on('disconnect', () => handleDisconnect(io, socket));
 }

@@ -5,13 +5,13 @@ import { useSocket } from '../../context/SocketContext';
 import { SocketEvents } from '../../enums/socketevents.enums';
 import { useGlobal } from '../../context/GlobalContext';
 import { getPeerConnectionConfig, Peer } from '../../utils/voice';
+
 const VoiceChat = () => {
     const [isMuted, setIsMuted] = useState(false);
     const [isVoiceChatEnabled, setIsVoiceChatEnabled] = useState(false);
     const localAudioStream = useRef(null);
     const { socket } = useSocket();
     const { lobby, currentUser } = useGlobal();
-
     const peers = useRef({});
 
     const enableVoiceChat = useCallback(async () => {
@@ -47,46 +47,105 @@ const VoiceChat = () => {
         };
 
         peerConnection.ontrack = (event) => {
-            // Handle receiving remote audio stream
             if (event.streams && event.streams[0]) {
                 const audioElement = document.getElementById(`audio-${socketId}`);
                 if (audioElement) {
                     audioElement.srcObject = event.streams[0];
                 } else {
-                    // Create a new audio element if it doesn't exist
                     const newAudioElement = document.createElement('audio');
                     newAudioElement.id = `audio-${socketId}`;
                     newAudioElement.autoplay = true;
                     newAudioElement.srcObject = event.streams[0];
-                    document.body.appendChild(newAudioElement); // Or append to a specific container
+                    document.body.appendChild(newAudioElement);
                 }
             }
         };
 
         if (localAudioStream.current) {
-            localAudioStream.current.getTracks().forEach(track => peerConnection.addTrack(track, localAudioStream.current));
+            localAudioStream.current.getTracks().forEach(track =>
+                peerConnection.addTrack(track, localAudioStream.current)
+            );
         }
-        const peer = new Peer(socketId, userId, peerConnection);
-        return peer;
 
+        return new Peer(socketId, userId, peerConnection);
     }, [socket, lobby.id]);
 
     const createAndSendOffer = useCallback(async (socketId, userId) => {
         if (peers.current[socketId]) {
             return;
         }
+
         const peer = createPeerConnection(socketId, userId);
         peers.current[socketId] = peer;
+
         try {
             const offer = await peer.peerConnection.createOffer();
             await peer.peerConnection.setLocalDescription(offer);
-            socket.emit(SocketEvents.SEND_OFFER, { offer, receiverId: socketId, senderId: socket.id, lobbyId: lobby.id });
+
+            socket.emit(SocketEvents.SEND_OFFER, {
+                offer,
+                receiverId: socketId,
+                senderId: socket.id,
+                lobbyId: lobby.id
+            });
         } catch (error) {
             console.error('Error creating and sending offer:', error);
         }
-
     }, [createPeerConnection, socket, lobby.id]);
 
+    const handleReceiveOffer = useCallback(async (data) => {
+        const { offer, senderId, receiverId } = data;
+
+        if (peers.current[senderId]) {
+            return;
+        }
+
+        const peer = createPeerConnection(senderId, currentUser.id);
+        peers.current[senderId] = peer;
+
+        try {
+            await peer.peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
+            const answer = await peer.peerConnection.createAnswer();
+            await peer.peerConnection.setLocalDescription(answer);
+
+            socket.emit(SocketEvents.SEND_ANSWER, {
+                answer,
+                receiverId: senderId,
+                senderId: socket.id,
+                lobbyId: lobby.id
+            });
+        } catch (error) {
+            console.error('Error handling offer:', error);
+        }
+    }, [createPeerConnection, socket, currentUser.id, lobby.id]);
+
+    const handleReceiveAnswer = useCallback(async (data) => {
+        const { answer, senderId } = data;
+
+        if (peers.current[senderId]) {
+            try {
+                await peers.current[senderId].peerConnection.setRemoteDescription(
+                    new RTCSessionDescription(answer)
+                );
+            } catch (error) {
+                console.error('Error setting remote description:', error);
+            }
+        }
+    }, []);
+
+    const handleReceiveIceCandidate = useCallback(async (data) => {
+        const { candidate, senderId } = data;
+
+        if (peers.current[senderId]) {
+            try {
+                await peers.current[senderId].peerConnection.addIceCandidate(
+                    new RTCIceCandidate(candidate)
+                );
+            } catch (error) {
+                console.error('Error adding ice candidate:', error);
+            }
+        }
+    }, []);
 
     useEffect(() => {
         if (!isVoiceChatEnabled) {
@@ -94,45 +153,62 @@ const VoiceChat = () => {
         }
 
         socket.on(SocketEvents.NEW_VOICE_USER_JOINED, (data) => {
-            console.log("New Voice User Joined", data);
             const { socketId, userId } = data;
             createAndSendOffer(socketId, userId);
         });
 
         socket.on(SocketEvents.EXISTING_VOICE_USER_JOINED, (data) => {
-            console.log("Existing Voice User Joined", data);
             const { socketId, userId } = data;
             if (socketId !== socket.id && !peers.current[socketId]) {
                 createAndSendOffer(socketId, userId);
             }
         });
 
-        socket.on(SocketEvents.RECEIVE_ICE_CANDIDATE, (data) => {
-            const { candidate, senderId } = data;
-            if (peers.current[senderId]) {
-                peers.current[senderId].pendingCandidates.push(candidate);
+        socket.on(SocketEvents.RECEIVE_ICE_CANDIDATE, handleReceiveIceCandidate);
+        socket.on(SocketEvents.RECEIVE_OFFER, handleReceiveOffer);
+        socket.on(SocketEvents.RECEIVE_ANSWER, handleReceiveAnswer);
+        socket.on(SocketEvents.VOICE_USER_LEFT, (data) => {
+            const { socketId } = data;
+            if (peers.current[socketId]) {
+                peers.current[socketId].peerConnection.close();
+                delete peers.current[socketId];
+            }
+            const audioElement = document.getElementById(`audio-${socketId}`);
+            if (audioElement) {
+                audioElement.remove();
             }
         });
-
-        socket.on(SocketEvents.RECEIVE_OFFER, (data) => {
-            console.log("Received Offer", data);
-            const { offer, senderId } = data;
-
-        });
-
 
         return () => {
             socket.off(SocketEvents.NEW_VOICE_USER_JOINED);
             socket.off(SocketEvents.EXISTING_VOICE_USER_JOINED);
             socket.off(SocketEvents.RECEIVE_ICE_CANDIDATE);
             socket.off(SocketEvents.RECEIVE_OFFER);
+            socket.off(SocketEvents.RECEIVE_ANSWER);
+            socket.off(SocketEvents.VOICE_USER_LEFT);
+
+            // Cleanup
+            Object.values(peers.current).forEach(peer => {
+                peer.peerConnection.close();
+            });
+            peers.current = {};
+        };
+    }, [isVoiceChatEnabled, enableVoiceChat, socket, createAndSendOffer,
+        handleReceiveOffer, handleReceiveAnswer, handleReceiveIceCandidate]);
+
+    const toggleMute = useCallback(() => {
+        if (localAudioStream.current) {
+            localAudioStream.current.getAudioTracks().forEach(track => {
+                track.enabled = isMuted;
+            });
         }
-    }, [isVoiceChatEnabled, enableVoiceChat, socket, createAndSendOffer]);
+        setIsMuted(prev => !prev);
+    }, [isMuted]);
 
     return (
         <div>
             <button
-                onClick={() => setIsMuted(prev => !prev)}
+                onClick={toggleMute}
                 className={`${styles.micButton} ${isMuted ? styles.muted : styles.unmuted}`}
             >
                 {isMuted ? <FaMicrophoneSlash /> : <FaMicrophone />}
