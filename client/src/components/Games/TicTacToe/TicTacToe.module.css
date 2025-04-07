@@ -1,0 +1,15 @@
+.container {
+    width: 95%;
+    height: 90%;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 123, 255, 0.5),
+                0 0 40px rgba(255, 105, 180, 0.3);
+    margin: auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(5px);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+} 
