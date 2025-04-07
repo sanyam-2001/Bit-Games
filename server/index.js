@@ -7,8 +7,10 @@ import { setupRedis } from "./config/Redis.config.js";
 import { fileURLToPath } from 'url';
 import * as dotenv from "dotenv";
 import cors from "cors";
+import { timelog } from "./utils/LoggingUtils.js";
 
 dotenv.config(); // Load environment variables from .env
+global.timelog = timelog;
 
 const app = express(); // Initialize express app
 const server = http.createServer(app);
