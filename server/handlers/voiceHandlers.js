@@ -13,16 +13,23 @@ const handleJoinVoiceRequest = (io, socket, data) => {
 
     voiceLobbies[lobbyId].add(socket.id);
 
+    // If this is the first user, they will be the offerer
+    const isFirstUser = voiceLobbies[lobbyId].size === 1;
+
+    // Notify existing users about the new user
     socket.to(lobbyId).emit(SocketEvents.NEW_VOICE_USER_JOINED, {
         userId,
-        socketId: socket.id
+        socketId: socket.id,
+        isOfferer: false // New users are always answerers
     });
 
+    // Send existing users to the new user
     const existingUsers = Array.from(voiceLobbies[lobbyId])
         .filter(id => id !== socket.id)
         .map(id => ({
             socketId: id,
-            userId: userId
+            userId: userId,
+            isOfferer: true // Existing users are offerers
         }));
 
     existingUsers.forEach(user => {

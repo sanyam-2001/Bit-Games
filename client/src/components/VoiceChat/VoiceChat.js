@@ -13,6 +13,7 @@ const VoiceChat = () => {
     const { socket } = useSocket();
     const { lobby, currentUser } = useGlobal();
     const peers = useRef({});
+    const isOfferer = useRef(false);
 
     const enableVoiceChat = useCallback(async () => {
         try {
@@ -71,7 +72,7 @@ const VoiceChat = () => {
     }, [socket, lobby.id]);
 
     const createAndSendOffer = useCallback(async (socketId, userId) => {
-        if (peers.current[socketId]) {
+        if (peers.current[socketId] || !isOfferer.current) {
             return;
         }
 
@@ -96,7 +97,7 @@ const VoiceChat = () => {
     const handleReceiveOffer = useCallback(async (data) => {
         const { offer, senderId } = data;
 
-        if (peers.current[senderId]) {
+        if (peers.current[senderId] || isOfferer.current) {
             return;
         }
 
@@ -159,13 +160,17 @@ const VoiceChat = () => {
         }
 
         socket.on(SocketEvents.NEW_VOICE_USER_JOINED, (data) => {
-            const { socketId, userId } = data;
-            createAndSendOffer(socketId, userId);
+            const { socketId, userId, isOfferer: shouldBeOfferer } = data;
+            isOfferer.current = shouldBeOfferer;
+            if (shouldBeOfferer) {
+                createAndSendOffer(socketId, userId);
+            }
         });
 
         socket.on(SocketEvents.EXISTING_VOICE_USER_JOINED, (data) => {
-            const { socketId, userId } = data;
-            if (socketId !== socket.id && !peers.current[socketId]) {
+            const { socketId, userId, isOfferer: shouldBeOfferer } = data;
+            isOfferer.current = shouldBeOfferer;
+            if (shouldBeOfferer && socketId !== socket.id && !peers.current[socketId]) {
                 createAndSendOffer(socketId, userId);
             }
         });
