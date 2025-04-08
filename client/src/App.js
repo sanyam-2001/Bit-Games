@@ -6,6 +6,7 @@ import { ThemeProvider } from 'styled-components';
 import { SocketProvider } from './context/SocketContext';
 import Home from './pages/Home/Home';
 import Lobby from './pages/Lobby/Lobby';
+import Game from './pages/Game/Game';
 import theme from './styles/theme';
 import GlobalStyles from './styles/GlobalStyles';
 import { Toast } from './components/ui/index';
@@ -47,6 +48,9 @@ const AppContent = () => {
             } />
             <Route path="/lobby" element={
                 <Lobby />
+            } />
+            <Route path="/game" element={
+                <Game />
             } />
         </Routes>
     );
