@@ -1,10 +1,9 @@
 class Game {
-  constructor(id, name, description, isTurnBased, turnId) {
+  constructor(id, name, description, isTurnBased = false) {
     this.id = id; //enum
     this.name = name;
     this.description = description;
     this.isTurnBased = isTurnBased; //boolean
-    this.turnId = turnId; //player uuid
   }
 }
 
