@@ -1,0 +1,59 @@
+.gameContainer {
+    position: relative;
+    display: grid;
+    grid-template-columns: 3fr minmax(300px, 1fr);
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--background);
+    color: var(--text-color);
+}
+
+/* Overlays */
+.gridOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        to bottom,
+        transparent 98%,
+        var(--grid-lines) 100%
+    ),
+    linear-gradient(to right, transparent 98%, var(--grid-lines) 100%);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.glowOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+        circle at 50% 50%,
+        rgba(8, 247, 254, 0.1) 0%,
+        rgba(254, 83, 187, 0.1) 40%,
+        transparent 70%
+    );
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Layout Sections */
+.leftSection {
+    position: relative;
+    padding: var(--space-md);
+    z-index: 2;
+    background-color: rgba(10, 14, 23, 0.4);
+    overflow-y: auto;
+}
+
+.rightSection {
+    padding: var(--space-md);
+    border-left: 1px solid rgba(254, 83, 187, 0.3);
+    box-shadow: -5px 0 15px rgba(254, 83, 187, 0.1);
+    z-index: 2;
+} 

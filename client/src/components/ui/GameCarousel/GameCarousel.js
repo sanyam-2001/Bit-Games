@@ -3,8 +3,7 @@ import styles from './GameCarousel.module.css';
 import { useGlobal } from '../../../context/GlobalContext';
 // Sample game data - in a real app, this would come from an API
 
-const GameCarousel = () => {
-    const [activeIndex, setActiveIndex] = useState(0);
+const GameCarousel = ({activeIndex, setActiveIndex}) => {
     const cardsContainerRef = useRef(null);
     const { gameList: games } = useGlobal();
 
