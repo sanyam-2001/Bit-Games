@@ -1,3 +1,12 @@
+import React, { useEffect } from 'react';
+import styles from './Lobby.module.css';
+import { SideMenu, GameCarousel, Chat, PrimaryButton, SecondaryButton } from '../../components/ui';
+import { useSocket } from '../../context/SocketContext';
+import { SocketEvents } from '../../enums/socketevents.enums';
+import { useGlobal } from '../../context/GlobalContext';
+import { useNavigator } from '../../utils/navigator';
+import { PlayerStatus } from '../../enums/PlayerStatus.enum';
+import VoiceChat from '../../components/VoiceChat/VoiceChat';
 import React, { useEffect } from "react";
 import styles from "./Lobby.module.css";
 import { useState } from "react";
@@ -14,7 +23,6 @@ import { useGlobal } from "../../context/GlobalContext";
 import { useNavigator } from "../../utils/navigator";
 import { PlayerStatus } from "../../enums/PlayerStatus.enum";
 import { showToast } from "../../utils/toast";
-
 const Lobby = () => {
   const { socket, connected } = useSocket();
   const { lobby, setLobby, currentUser, gameList } = useGlobal();
@@ -50,6 +58,31 @@ const Lobby = () => {
         navigate("/game");
       });
     }
+    return (
+        <div className={styles.lobbyContainer}>
+            <div className={styles.glowOverlay}></div>
+            <div className={styles.gridOverlay}></div>
+
+            <div className={styles.leftSection}>
+                <SideMenu />
+            </div>
+
+            <div className={styles.centerSection}>
+                <div style={{ padding: '20px' }}>
+                    {/* <h2 className={styles.sectionHeader}>Select Game</h2> */}
+                    <GameCarousel />
+                </div>
+
+                <div className={styles.buttonContainer}>
+                    {amIAdmin && <PrimaryButton disabled={!isEveryoneReady} onClick={handleStartGame}>Start Game</PrimaryButton>}
+                    <SecondaryButton onClick={handleReadyToggle}>{isReady ? "Unready" : "Ready"}</SecondaryButton>
+                    <VoiceChat />
+                </div>
+            </div>
+
+            <div className={styles.rightSection}>
+                <Chat />
+            </div>
 
     return () => {
       if (socket) {
