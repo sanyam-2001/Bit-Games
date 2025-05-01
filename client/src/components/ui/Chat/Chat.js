@@ -29,6 +29,7 @@ const Chat = () => {
     useEffect(() => {
         if (connected && socket) {
             socket.on(events.RECEIVE_CHAT_MESSAGE, ({ success, error, data }) => {
+                console.log("Message Received:", data);
                 setMessages((prev) => {
                     return [...prev, data];
                 });

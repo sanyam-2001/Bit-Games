@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-// eslint-disable-next-line
 import Spline from "@splinetool/react-spline";
 import { Card, FlexContainer } from "../../components/ui/Container/Container";
 import Input, { InputGroup } from "../../components/ui/Input/Input";
