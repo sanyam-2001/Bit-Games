@@ -9,7 +9,10 @@ const LobbySocketEvents = {
 }
 const ChatSocketEvents = {
     SEND_CHAT_MESSAGE: "SEND_CHAT_MESSAGE",
-    RECEIVE_CHAT_MESSAGE: "RECEIVE_CHAT_MESSAGE",
+    RECEIVE_CHAT_MESSAGE: "RECEIVE_CHAT_MESSAGE"
+}
+
+const VoiceSocketEvents = {
     JOIN_VOICE_REQUEST: "JOIN_VOICE_REQUEST",
     NEW_VOICE_USER_JOINED: "NEW_VOICE_USER_JOINED",
     EXISTING_VOICE_USER_JOINED: "EXISTING_VOICE_USER_JOINED",
@@ -20,7 +23,6 @@ const ChatSocketEvents = {
     SEND_ANSWER: "SEND_ANSWER",
     RECEIVE_ANSWER: "RECEIVE_ANSWER",
     VOICE_USER_LEFT: "VOICE_USER_LEFT",
-
 }
 
 const TicTacToeSocketEvents = {
@@ -32,5 +34,6 @@ export const SocketEvents = {
     ...LobbySocketEvents,
     ...ChatSocketEvents,
     ...TicTacToeSocketEvents,
+    ...VoiceSocketEvents
 };
 

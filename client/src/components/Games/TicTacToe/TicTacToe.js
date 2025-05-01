@@ -6,7 +6,7 @@ import { SocketEvents } from "../../../enums/socketevents.enums";
 const TicTacToe = () => {
     const { socket, connected } = useSocket();
     const { lobby, currentUser } = useGlobal();
-    const [, setGameState] = useState({});
+    const [gameState, setGameState] = useState({});
 
     useEffect(() => {
         if (socket && connected && lobby.admin === currentUser.id) {
@@ -26,7 +26,7 @@ const TicTacToe = () => {
             }
         };
     }, [setGameState, socket, connected]);
-
+    console.log(gameState);
     return <div>TicTacToe</div>;
 };
 
