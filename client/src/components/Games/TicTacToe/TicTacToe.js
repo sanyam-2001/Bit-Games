@@ -5,6 +5,7 @@ import { SocketEvents } from "../../../enums/socketevents.enums";
 import style from './TicTacToe.module.css';
 import { defaultTicTacToeState } from "../../../utils/DefaultState";
 import { showToast } from "../../../utils/toast";
+
 const TicTacToe = () => {
     const { socket, connected } = useSocket();
     const { lobby, currentUser } = useGlobal();
@@ -12,6 +13,7 @@ const TicTacToe = () => {
     const [draggedCup, setDraggedCup] = useState(null);
     const [dragOverCell, setDragOverCell] = useState(null);
     const [myColor, setMyColor] = useState("");
+
     useEffect(() => {
         if (socket && connected && lobby.admin === currentUser.id) {
             socket.emit(SocketEvents.CREATE_GAME_1, { lobbyId: lobby.id });
@@ -40,9 +42,22 @@ const TicTacToe = () => {
             setDragOverCell(null);
         });
 
+        socket.on(SocketEvents.TTT_GAME_OVER_1, ({ success, error, data }) => {
+            const { winnerId } = data;
+            if (!winnerId) {
+                showToast.info("DRAW");
+            } else if (winnerId === currentUser.id) {
+                showToast.success("YOU WIN");
+            } else {
+                showToast.error("YOU LOST MODAFUCKA");
+            }
+        });
+
         return () => {
             if (socket) {
                 socket.off(SocketEvents.START_GAME_1);
+                socket.off(SocketEvents.TTT_GAME_UPDATE_1);
+                socket.off(SocketEvents.TTT_GAME_OVER_1);
             }
         };
     }, [setGameState, socket, connected, currentUser.id]);
