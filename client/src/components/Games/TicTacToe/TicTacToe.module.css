@@ -1,178 +1,219 @@
 .container {
-    width: 95%;
-    height: 90%;
-    border-radius: 15px;
-    box-shadow: 0 0 20px rgba(0, 123, 255, 0.5),
-                0 0 40px rgba(255, 105, 180, 0.3);
-    margin: auto;
-    padding: 20px;
-    background: rgba(20, 20, 35, 0.95);
-    backdrop-filter: blur(5px);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    font-family: 'Arial', sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
+  width: 95%;
+  height: 90%;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(0, 123, 255, 0.5), 0 0 40px rgba(255, 105, 180, 0.3);
+  margin: auto;
+  padding: 20px;
+  background: rgba(20, 20, 35, 0.95);
+  backdrop-filter: blur(5px);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-family: "Arial", sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.title {
-    text-align: center;
-    font-size: 2.5rem;
-    margin-bottom: 20px;
-    text-shadow: 0 0 10px #fff, 
-                 0 0 20px #fff, 
-                 0 0 30px #4e00ca, 
-                 0 0 40px #4e00ca;
-    color: #fff;
+.topContainer {
+  width: 100%;
+  height: 80%;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 30px;
 }
 
-.gameContainer {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    margin-bottom: 20px;
+.topLeft,
+.topRight {
+  flex: 0.175;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  min-width: 100px;
 }
 
-.playerSection {
-    width: 20%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.topMiddle {
+  flex: 0.65;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
 }
 
-.playerTitle {
-    font-size: 1.5rem;
-    margin-bottom: 15px;
-    text-align: center;
+.topMiddle::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    rgba(0, 243, 255, 0.1),
+    rgba(255, 105, 180, 0.1)
+  );
+  animation: rotate 10s linear infinite;
+  z-index: 0;
 }
 
-.blueText {
-    color: #00f7ff;
-    text-shadow: 0 0 5px #00f7ff, 
-                0 0 10px #00f7ff, 
-                0 0 15px #00f7ff;
+.bottomContainer {
+  width: 100%;
+  height: 20%;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
 }
 
-.pinkText {
-    color: #ff00e6;
-    text-shadow: 0 0 5px #ff00e6, 
-                0 0 10px #ff00e6, 
-                0 0 15px #ff00e6;
+.bottomLeft,
+.bottomRight {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
 }
 
-.cupsContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
+.boardContainer {
+  width: 85%;
+  height: 95%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  background: rgba(20, 20, 35, 0.8);
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(0, 123, 255, 0.3), 0 0 40px rgba(255, 105, 180, 0.2);
 }
 
-.board {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
-    gap: 10px;
-    width: 50%;
-    height: 300px;
-    margin: 0 auto;
-    border: 2px solid white;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.8),
-                0 0 20px rgba(255, 255, 255, 0.5);
-    padding: 10px;
-    background: rgba(0, 0, 0, 0.7);
-    border-radius: 10px;
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  flex: 1;
 }
 
 .cell {
-    background: rgba(40, 40, 60, 0.8);
-    border-radius: 8px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.3);
-    position: relative;
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.1);
 }
 
 .cell:hover {
-    background: rgba(60, 60, 80, 0.8);
-    box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 15px rgba(0, 123, 255, 0.3);
 }
 
-.cupWrapper {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    cursor: grab;
-    margin: 5px;
+.cell.dragOver {
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 20px rgba(0, 123, 255, 0.5);
+  border: 2px solid rgba(0, 123, 255, 0.5);
 }
 
-.cupWrapper:active {
-    cursor: grabbing;
+.cell::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    rgba(0, 123, 255, 0.1),
+    rgba(255, 105, 180, 0.1)
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
-.cupImage {
-    width: 100%;
-    height: auto;
-    max-width: 80px;
-    max-height: 100px;
+.cell:hover::before {
+  opacity: 1;
 }
 
-.cupSize {
-    position: absolute;
-    bottom: 35%;
-    font-weight: bold;
-    font-size: 1.2rem;
+.cell.blue {
+  box-shadow: 0 0 20px rgba(0, 123, 255, 0.5);
 }
 
-.blueGlow {
-    filter: drop-shadow(0 0 5px #00f7ff) drop-shadow(0 0 10px #00f7ff);
+.cell.pink {
+  box-shadow: 0 0 20px rgba(255, 105, 180, 0.5);
 }
 
-.blueGlow .cupSize {
-    color: #00f7ff;
-    text-shadow: 0 0 5px #00f7ff, 0 0 10px #00f7ff;
+.cup {
+  width: 80%;
+  height: 80%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  transition: all 0.3s ease;
+  user-select: none;
+  -webkit-user-drag: element;
 }
 
-.pinkGlow {
-    filter: drop-shadow(0 0 5px #ff00e6) drop-shadow(0 0 10px #ff00e6);
+.cup:hover {
+  transform: scale(1.1);
 }
 
-.pinkGlow .cupSize {
-    color: #ff00e6;
-    text-shadow: 0 0 5px #ff00e6, 0 0 10px #ff00e6;
+.cup.dragging {
+  opacity: 0.8;
+  transform: scale(1.2);
+  cursor: grabbing;
 }
 
-.turnIndicator {
-    font-size: 1.3rem;
-    margin: 15px 0;
-    text-align: center;
-    text-shadow: 0 0 5px white;
+.cup.empty {
+  cursor: not-allowed;
+  filter: grayscale(100%);
 }
 
-.resetButton {
-    padding: 10px 20px;
-    font-size: 1rem;
-    background: rgba(0, 0, 0, 0.5);
-    color: white;
-    border: 1px solid white;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-top: 10px;
-    box-shadow: 0 0 5px white;
+.blue {
+  filter: drop-shadow(0 0 10px rgba(0, 123, 255, 0.5));
 }
 
-.resetButton:hover {
-    background: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 0 10px white;
-} 
+.pink {
+  filter: drop-shadow(0 0 10px rgba(255, 105, 180, 0.5));
+}
+
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5),
+      0 0 10px rgba(255, 105, 180, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(0, 123, 255, 0.7),
+      0 0 30px rgba(255, 105, 180, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5),
+      0 0 10px rgba(255, 105, 180, 0.3);
+  }
+}
+
+.boardContainer {
+  animation: glow 3s infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

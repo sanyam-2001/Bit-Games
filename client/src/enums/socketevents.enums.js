@@ -10,6 +10,9 @@ const LobbySocketEvents = {
 const ChatSocketEvents = {
     SEND_CHAT_MESSAGE: "SEND_CHAT_MESSAGE",
     RECEIVE_CHAT_MESSAGE: "RECEIVE_CHAT_MESSAGE",
+}
+
+const VoiceSocketEvents = {
     JOIN_VOICE_REQUEST: "JOIN_VOICE_REQUEST",
     NEW_VOICE_USER_JOINED: "NEW_VOICE_USER_JOINED",
     EXISTING_VOICE_USER_JOINED: "EXISTING_VOICE_USER_JOINED",
@@ -25,11 +28,15 @@ const ChatSocketEvents = {
 const TicTacToeSocketEvents = {
     CREATE_GAME_1: "CREATE_GAME_1",
     START_GAME_1: "START_GAME_1",
+    TTT_MOVE_1: "TTT_MOVE_1",
+    TTT_GAME_UPDATE_1: "TTT_GAME_UPDATE_1",
+    TTT_GAME_OVER_1: "TTT_GAME_OVER_1"
 }
 
 export const SocketEvents = {
     ...LobbySocketEvents,
     ...ChatSocketEvents,
     ...TicTacToeSocketEvents,
+    ...VoiceSocketEvents
 };
 

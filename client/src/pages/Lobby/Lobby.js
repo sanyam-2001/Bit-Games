@@ -69,8 +69,9 @@ const Lobby = () => {
             const gameId = selectedGame.id;
 
             if (
-                selectedGame.players.min > lobby.players.length ||
-                selectedGame.players.max < lobby.players.length
+                false
+                // selectedGame.players.min > lobby.players.length ||
+                // selectedGame.players.max < lobby.players.length
             ) {
                 showToast.warning(
                     `${selectedGame.name} requires ${selectedGame.players.min} to ${selectedGame.players.max} players`
