@@ -43,7 +43,10 @@ const TicTacToe = () => {
         });
 
         socket.on(SocketEvents.TTT_GAME_OVER_1, ({ success, error, data }) => {
-            const { winnerId } = data;
+            const { winnerId, game } = data;
+            if (game?.gameState) {
+                setGameState(game?.gameState);
+            }
             if (!winnerId) {
                 showToast.info("DRAW");
             } else if (winnerId === currentUser.id) {
@@ -186,8 +189,8 @@ const TicTacToe = () => {
                 </div>
             </div>
             <div className={style.bottomContainer}>
-                <div className={style.bottomLeft}>{gameState.turnId === currentUser.id ? "Opponents Turn" : "My Turn"}</div>
-                <div className={style.bottomRight}>0-0</div>
+                <div className={style.bottomLeft}>{gameState.turnId === currentUser.id ? "Opponents Turn" : "My Turn"}-My Color{myColor}</div>
+                <div className={style.bottomRight}>Pink {gameState.score.pink}-{gameState.score.blue} Blue</div>
             </div>
         </div>
     );

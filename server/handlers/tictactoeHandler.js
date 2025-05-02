@@ -59,8 +59,20 @@ const handleTTTMove = async (io, socket, data) => {
 
     if (!isGameOver) return;
 
+    if (!winnerId) {
+        //Increase Both scores by 1
+        game.gameState.score.blue += 1;
+        game.gameState.score.pink += 1;
+    } else {
+        // Increase Only
+        if (game.gameState.bluePlayer.playerId === winnerId) game.gameState.score.blue += 1;
+        if (game.gameState.pinkPlayer.playerId === winnerId) game.gameState.score.pink += 1;
+    }
+
+    await redisService.set(`GAME:TIC_TAC_TOE:${game.id}`, game);
     io.in(lobbyId).emit(events.TTT_GAME_OVER_1, new SocketPayload(true, null, {
-        winnerId
+        winnerId,
+        game
     }));
 
 }
