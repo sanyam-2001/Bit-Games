@@ -6,7 +6,8 @@ import style from './TicTacToe.module.css';
 import { defaultTicTacToeState } from "../../../utils/DefaultState";
 import { showToast } from "../../../utils/toast";
 import VoiceChat from '../../../components/VoiceChat/VoiceChat';
-
+import GameEndBanner from "../../ui/GameEndBanner/GameEndBanner";
+import { WinStatus } from "../../../enums/WinStatus.enum";
 
 const TicTacToe = () => {
     const { socket, connected } = useSocket();
@@ -15,6 +16,9 @@ const TicTacToe = () => {
     const [draggedCup, setDraggedCup] = useState(null);
     const [dragOverCell, setDragOverCell] = useState(null);
     const [myColor, setMyColor] = useState("");
+    const [showEndBanner, setShowEndBanner] = useState(false);
+    const [gameWinStatus, setGameWinStatus] = useState(false);
+
     const bluePlayerName = lobby?.players?.find((el) => el.id === gameState?.bluePlayer?.playerId)?.name;
     const pinkPlayerName = lobby?.players?.find((el) => el.id === gameState?.pinkPlayer?.playerId)?.name;
 
@@ -51,12 +55,14 @@ const TicTacToe = () => {
             if (game?.gameState) {
                 setGameState(game?.gameState);
             }
+            setShowEndBanner(true);
+
             if (!winnerId) {
-                showToast.info("DRAW");
+                setGameWinStatus(WinStatus.DRAW);
             } else if (winnerId === currentUser.id) {
-                showToast.success("YOU WIN");
+                setGameWinStatus(WinStatus.WIN);
             } else {
-                showToast.error("YOU LOST MODAFUCKA");
+                setGameWinStatus(WinStatus.LOSE);
             }
         });
 
@@ -181,6 +187,11 @@ const TicTacToe = () => {
 
     return (
         <div className={style.container}>
+            <GameEndBanner 
+                visible={showEndBanner} 
+                state={gameWinStatus} 
+                onClose={() => setShowEndBanner(false)} 
+                />
             <div className={style.topContainer}>
                 <div className={`${style.topLeft} ${gameState.turnId === currentUser.id && myColor === "blue" ? style.activePanel : ""}`}>
                     {renderCups('blue', gameState?.bluePlayer?.cups)}
