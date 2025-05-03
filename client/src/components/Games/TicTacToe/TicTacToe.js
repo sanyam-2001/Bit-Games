@@ -5,6 +5,8 @@ import { SocketEvents } from "../../../enums/socketevents.enums";
 import style from './TicTacToe.module.css';
 import { defaultTicTacToeState } from "../../../utils/DefaultState";
 import { showToast } from "../../../utils/toast";
+import VoiceChat from '../../../components/VoiceChat/VoiceChat';
+
 
 const TicTacToe = () => {
     const { socket, connected } = useSocket();
@@ -13,6 +15,8 @@ const TicTacToe = () => {
     const [draggedCup, setDraggedCup] = useState(null);
     const [dragOverCell, setDragOverCell] = useState(null);
     const [myColor, setMyColor] = useState("");
+    const bluePlayerName = lobby?.players?.find((el) => el.id === gameState?.bluePlayer?.playerId)?.name;
+    const pinkPlayerName = lobby?.players?.find((el) => el.id === gameState?.pinkPlayer?.playerId)?.name;
 
     useEffect(() => {
         if (socket && connected && lobby.admin === currentUser.id) {
@@ -69,7 +73,7 @@ const TicTacToe = () => {
         console.log(currentUser)
         const isMyTurn = gameState.turnId === currentUser.id;
 
-        if (isMyTurn) {
+        if (!isMyTurn) {
             showToast.error("Not Your Turn");
             return;
         };
@@ -160,7 +164,7 @@ const TicTacToe = () => {
                                             <div
                                                 className={style.cup}
                                                 style={{
-                                                    transform: `scale(${0.7 + (cell.weight * 0.15)})`,
+                                                    transform: `scale(${0.7 + (cell.weight - 1) * 0.15})`,
                                                     backgroundImage: `url(${cell.color === 'blue' ? '/Blue_cup.png' : '/Pink_cup.png'})`
                                                 }}
                                             />
@@ -178,19 +182,25 @@ const TicTacToe = () => {
     return (
         <div className={style.container}>
             <div className={style.topContainer}>
-                <div className={style.topLeft}>
+                <div className={`${style.topLeft} ${gameState.turnId === currentUser.id && myColor === "blue" ? style.activePanel : ""}`}>
                     {renderCups('blue', gameState?.bluePlayer?.cups)}
                 </div>
                 <div className={style.topMiddle}>
                     {renderBoard()}
                 </div>
-                <div className={style.topRight}>
+                <div className={`${style.topRight} ${gameState.turnId === currentUser.id && myColor === "pink" ? style.activePanel : ""}`}>
                     {renderCups('pink', gameState?.pinkPlayer?.cups)}
                 </div>
             </div>
             <div className={style.bottomContainer}>
-                <div className={style.bottomLeft}>{gameState.turnId === currentUser.id ? "Opponents Turn" : "My Turn"}-My Color{myColor}</div>
-                <div className={style.bottomRight}>Pink {gameState.score.pink}-{gameState.score.blue} Blue</div>
+                <div className={style.bottomLeft}>
+                    <VoiceChat />
+                </div>
+                <div className={style.bottomRight}>
+                    <div className={style.pixelatedScore}>
+                        {pinkPlayerName} {gameState?.score?.pink}-{gameState?.score?.blue} {bluePlayerName}
+                    </div>
+                </div>
             </div>
         </div>
     );
