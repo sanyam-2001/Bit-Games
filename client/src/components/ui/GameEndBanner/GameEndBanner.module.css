@@ -1,0 +1,58 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  cursor: pointer;
+  animation: fadeIn 0.5s ease-in-out;
+  overflow: hidden;
+}
+
+.banner {
+  padding: 2rem 4rem;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  transform: scale(0);
+  animation: popIn 0.5s ease-out forwards;
+}
+
+.win {
+  background-color: rgba(46, 204, 113, 0.9);
+  border: 4px solid #27ae60;
+  color: white;
+}
+
+.lose {
+  background-color: rgba(231, 76, 60, 0.9);
+  border: 4px solid #c0392b;
+  color: white;
+}
+
+.banner h1 {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.banner p {
+  font-size: 1.5rem;
+  opacity: 0.8;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes popIn {
+  0% { transform: scale(0); }
+  70% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
