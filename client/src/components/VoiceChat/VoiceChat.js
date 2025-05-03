@@ -7,7 +7,7 @@ import { useGlobal } from '../../context/GlobalContext';
 import { getPeerConnectionConfig, Peer } from '../../utils/voice';
 
 const VoiceChat = () => {
-    const [isMuted, setIsMuted] = useState(false);
+    const [isMuted, setIsMuted] = useState(true);
     const [isVoiceChatEnabled, setIsVoiceChatEnabled] = useState(false);
     const localAudioStream = useRef(null);
     const { socket } = useSocket();
@@ -21,6 +21,12 @@ const VoiceChat = () => {
                 audio: true,
                 video: false
             });
+
+            // Mute audio tracks by default
+            userMediaStream.getAudioTracks().forEach(track => {
+                track.enabled = false;
+            });
+
             localAudioStream.current = userMediaStream;
             setIsVoiceChatEnabled(true);
             socket.emit(SocketEvents.JOIN_VOICE_REQUEST, {
