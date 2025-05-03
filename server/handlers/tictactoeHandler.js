@@ -2,7 +2,7 @@ import { SocketEvents as events } from "../enums/SocketEvents.enum.js";
 import redisService from "../services/Redis.service.js";
 import { v4 as uuid } from "uuid";
 import SocketPayload from "../Models/SocketPayload.model.js";
-import { TicTacToe } from "../models/TicTacToe.model.js";
+import { TicTacToe } from "../Models/TicTacToe.model.js";
 
 const handleCreateGame = async (io, socket, data) => {
     try {
