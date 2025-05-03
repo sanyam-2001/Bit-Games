@@ -45,6 +45,9 @@ const TicTacToe = () => {
         socket.on(SocketEvents.TTT_GAME_UPDATE_1, ({ success, error, data }) => {
             if (data?.gameState) {
                 setGameState(data?.gameState);
+                if (data?.isGameRestart) {
+                    setShowEndBanner(false);
+                }
             }
             setDraggedCup(null);
             setDragOverCell(null);
@@ -185,13 +188,21 @@ const TicTacToe = () => {
         );
     }
 
+    const restartTTTGame = () => {
+        if (socket) {
+            socket.emit(SocketEvents.TTT_GAME_RESTART_1, {
+                lobbyId: lobby?.id
+            });
+        }
+    }
     return (
         <div className={style.container}>
-            <GameEndBanner 
-                visible={showEndBanner} 
-                state={gameWinStatus} 
-                onClose={() => setShowEndBanner(false)} 
-                />
+            <GameEndBanner
+                visible={showEndBanner}
+                state={gameWinStatus}
+                onClose={() => setShowEndBanner(false)}
+                restartGame={restartTTTGame}
+            />
             <div className={style.topContainer}>
                 <div className={`${style.topLeft} ${gameState.turnId === currentUser.id && myColor === "blue" ? style.activePanel : ""}`}>
                     {renderCups('blue', gameState?.bluePlayer?.cups)}

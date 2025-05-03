@@ -155,8 +155,59 @@ const checkIfGameOver = (game) => {
     return { isGameOver: false, winnerId: null }; // Game continues
 }
 
+const handleGameRestart = async (io, socket, data) => {
+    const { lobbyId } = data;
+
+    const lobby = await redisService.get(`LOBBY:${lobbyId}`);
+    const game = await redisService.get(`GAME:TIC_TAC_TOE:${lobby.activeGameInstanceId}`);
+
+    game.gameState.board = getNewBoard();
+    game.gameState.bluePlayer.cups = [1, 1, 1, 1, 1];
+    game.gameState.pinkPlayer.cups = [1, 1, 1, 1, 1];
+
+    const newTurnId = getNextTurnId(game.gameState);
+    game.gameState.turnId = newTurnId;
+    game.gameState.startTurnId = newTurnId;
+
+    await redisService.set(`GAME:TIC_TAC_TOE:${game.id}`, game);
+    io.in(lobbyId).emit(events.TTT_GAME_UPDATE_1, new SocketPayload(true, null, {
+        isGameRestart: true,
+        gameState: game.gameState
+    }));
+
+
+}
+const getNewBoard = () => {
+    return [
+        [
+            { color: "", weight: 0 },
+            { color: "", weight: 0 },
+            { color: "", weight: 0 },
+        ],
+        [
+            { color: "", weight: 0 },
+            { color: "", weight: 0 },
+            { color: "", weight: 0 },
+        ],
+        [
+            { color: "", weight: 0 },
+            { color: "", weight: 0 },
+            { color: "", weight: 0 },
+        ],
+    ]
+}
+
+const getNextTurnId = (gameState) => {
+    const startId = gameState.startTurnId;
+    const newTurnId = gameState.bluePlayer.playerId === startId
+        ? gameState.pinkPlayer.playerId
+        : gameState.bluePlayer.playerId;
+
+    return newTurnId;
+}
 
 export const registerTicTacToeHandlers = (io, socket) => {
     socket.on(events.CREATE_GAME_1, (data) => handleCreateGame(io, socket, data));
     socket.on(events.TTT_MOVE_1, (data) => handleTTTMove(io, socket, data));
+    socket.on(events.TTT_GAME_RESTART_1, (data) => handleGameRestart(io, socket, data));
 };

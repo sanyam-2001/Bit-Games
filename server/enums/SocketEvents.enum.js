@@ -30,7 +30,8 @@ const TicTacToeSocketEvents = {
     START_GAME_1: "START_GAME_1",
     TTT_MOVE_1: "TTT_MOVE_1",
     TTT_GAME_UPDATE_1: "TTT_GAME_UPDATE_1",
-    TTT_GAME_OVER_1: "TTT_GAME_OVER_1"
+    TTT_GAME_OVER_1: "TTT_GAME_OVER_1",
+    TTT_GAME_RESTART_1: "TTT_GAME_RESTART_1"
 }
 
 export const SocketEvents = {

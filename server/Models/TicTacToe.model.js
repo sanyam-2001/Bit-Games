@@ -31,6 +31,7 @@ class GameState {
         this.pinkPlayer = { playerId: pinkPlayerId, cups: [1, 1, 1, 1, 1] };
         this.score = { blue: 0, pink: 0 };
         this.turnId = turnId;
+        this.startTurnId = turnId;
     }
 
 }
