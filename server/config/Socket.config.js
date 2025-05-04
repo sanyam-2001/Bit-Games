@@ -7,6 +7,7 @@ import redisService from '../services/Redis.service.js';
 import SocketPayload from '../Models/SocketPayload.model.js';
 import { registerVoiceHandlers } from '../handlers/voiceHandlers.js';
 import { registerTicTacToeHandlers } from '../handlers/tictactoeHandler.js';
+
 export const setupSocketHandlers = (server) => {
     const io = new Server(server, {
         cors: {
@@ -33,14 +34,17 @@ export const setupSocketHandlers = (server) => {
                 return;
             }
             const { lobbyId, playerId: leavingPlayersId } = response;
-
             const lobby = await redisService.get(`LOBBY:${lobbyId}`);
+            const disconnectedPlayer = lobby.players.find((player) => player.id == leavingPlayersId);
+
             lobby.players = lobby.players.filter(
                 (player) => player.id !== leavingPlayersId
             );
+
             if (lobby.players.length > 0 && lobby.admin === leavingPlayersId) {
                 lobby.admin = lobby.players[0].id;
             }
+
             await redisService.delete(`SOCKET:${socket.id}`);
             await redisService.set(`LOBBY:${lobbyId}`, lobby);
 
@@ -48,6 +52,14 @@ export const setupSocketHandlers = (server) => {
                 SocketEvents.LOBBY_UPDATED,
                 new SocketPayload(true, null, { lobby })
             );
+
+            if(lobby.activeGameInstanceId != null){
+                io.to(lobbyId).emit(
+                    SocketEvents.PLAYER_DISCONNECTED,
+                    new SocketPayload (true, null, {navigateToLobby: true, disconnectedPlayer: disconnectedPlayer}) //change to true or false based on if we want to navigate to lobby or not.
+                );
+            }
+            
             timelog(`Client disconnected: ${socket.id}`);
         });
     });
