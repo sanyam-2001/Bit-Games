@@ -5,7 +5,7 @@ import { WinStatus } from '../../../enums/WinStatus.enum';
 import Button from '../Button/Button';
 import { useGlobal } from '../../../context/GlobalContext.js';
 
-const GameEndBanner = ({ state, onClose, visible, restartGame, backToTheLobby }) => {
+const GameEndBanner = ({ state, visible, restartGame, backToTheLobby }) => {
     const [showConfetti, setShowConfetti] = useState(false);
     const { lobby, currentUser } = useGlobal();
     useEffect(() => {
@@ -37,7 +37,7 @@ const GameEndBanner = ({ state, onClose, visible, restartGame, backToTheLobby })
         else return null;
     }
 
-    const renderBackToTheLobbyButton = () =>{
+    const renderBackToTheLobbyButton = () => {
         const isAdmin = lobby?.admin === currentUser?.id;
         if (isAdmin)
             return (
@@ -48,7 +48,7 @@ const GameEndBanner = ({ state, onClose, visible, restartGame, backToTheLobby })
     }
 
     return (
-        <div className={styles.overlay} onClick={onClose}>
+        <div className={styles.overlay}>
             {showConfetti && <Confetti width={window.innerWidth} height={window.innerHeight} />}
             <div className={`${styles.banner} ${state === WinStatus.WIN ? styles.win : styles.lose}`}>
                 {state === WinStatus.WIN && <h1>YOU WIN!</h1>}

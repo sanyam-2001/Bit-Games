@@ -43,6 +43,7 @@ const TicTacToe = () => {
             });
 
         socket.on(SocketEvents.TTT_GAME_UPDATE_1, ({ success, error, data }) => {
+            console.log(data)
             if (data?.gameState) {
                 setGameState(data?.gameState);
                 if (data?.isGameRestart) {
