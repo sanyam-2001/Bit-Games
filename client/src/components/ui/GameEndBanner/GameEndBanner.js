@@ -59,7 +59,7 @@ const GameEndBanner = ({ state, onClose, visible, restartGame, backToTheLobby })
             <div className={styles.restartButton}>
                 {renderRestartButton()}
                 {renderBackToTheLobbyButton()}
-            </div>\
+            </div>
 
         </div>
     );
