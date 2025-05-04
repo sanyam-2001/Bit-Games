@@ -7,6 +7,7 @@ import { useNavigator } from '../../utils/navigator';
 import TicTacToe from '../../components/Games/TicTacToe/TicTacToe';
 import { useSocket } from '../../context/SocketContext';
 import { SocketEvents } from '../../enums/socketevents.enums';
+import { showToast } from '../../utils/toast';
 
 // Placeholder components for other games
 // These should be replaced with actual game components when they are developed
@@ -25,7 +26,7 @@ const JKLM = () => (
 );
 
 const Game = () => {
-    const { lobby, gameList } = useGlobal();
+    const { lobby, gameList, setLobby } = useGlobal();
     const { socket } = useSocket();
 
     const navigate = useNavigator();
@@ -39,13 +40,29 @@ const Game = () => {
         if (socket)
         {
             socket.on(SocketEvents.NAVIGATE_TO_LOBBY, ({ success, error, data }) => {
+                setLobby(lobby);
                 navigate('/lobby');
             });
+
+            //critical poc, change after discussion
+            socket.on(SocketEvents.LOBBY_UPDATED, ({ success, error, data }) => {
+                setLobby(data?.lobby);
+            });
+
+            socket.on(SocketEvents.PLAYER_DISCONNECTED, ({success, error, data}) => {
+                showToast.info(`${data?.disconnectedPlayer?.name} +  disconnected!`);
+
+                if (data.navigateToLobby){
+                    navigate('/lobby');
+                }
+            })
         }
         
         return () => {
             if (socket){
                 socket.off(SocketEvents.NAVIGATE_TO_LOBBY);
+                socket.off(SocketEvents.PLAYER_DISCONNECTED);
+                socket.off(SocketEvents.LOBBY_UPDATED);
             }
         }
 
