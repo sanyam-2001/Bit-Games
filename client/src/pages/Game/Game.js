@@ -1,9 +1,12 @@
 import React from 'react';
+import {useEffect } from "react";
 import styles from './Game.module.css';
 import { Chat } from '../../components/ui';
 import { useGlobal } from '../../context/GlobalContext';
 import { useNavigator } from '../../utils/navigator';
 import TicTacToe from '../../components/Games/TicTacToe/TicTacToe';
+import { useSocket } from '../../context/SocketContext';
+import { SocketEvents } from '../../enums/socketevents.enums';
 
 // Placeholder components for other games
 // These should be replaced with actual game components when they are developed
@@ -22,15 +25,31 @@ const JKLM = () => (
 );
 
 const Game = () => {
-    const { lobby, currentUser, gameList } = useGlobal();
+    const { lobby, gameList } = useGlobal();
+    const { socket } = useSocket();
+
     const navigate = useNavigator();
 
     // If Lobby is null or lobby.id is null, redirect the page to /home
-    React.useEffect(() => {
+    useEffect(() => {
         if (!lobby || !lobby.id) {
             navigate('/home');
         }
-    }, [lobby, navigate]);
+
+        if (socket)
+        {
+            socket.on(SocketEvents.NAVIGATE_TO_LOBBY, ({ success, error, data }) => {
+                navigate('/lobby');
+            });
+        }
+        
+        return () => {
+            if (socket){
+                socket.off(SocketEvents.NAVIGATE_TO_LOBBY);
+            }
+        }
+
+    }, [lobby, navigate, socket]);
 
     // Render the appropriate game component based on gameId in lobby
     const renderGame = () => {

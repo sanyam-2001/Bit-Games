@@ -111,12 +111,14 @@ const TicTacToe = () => {
     const handleDragLeave = (e) => {
         setDragOverCell(null);
     };
+
     const isLegalMove = (row, col) => {
         console.log(row, col, draggedCup);
         if (gameState?.board[row][col].color === draggedCup.color) return false;
         if (gameState?.board[row][col].weight >= (draggedCup.index + 1)) return false;
         return true;
-    }
+    };
+
     const handleDrop = (e, rowIndex, colIndex) => {
         e.preventDefault();
         if (!draggedCup) return;
@@ -194,7 +196,16 @@ const TicTacToe = () => {
                 lobbyId: lobby?.id
             });
         }
+    };
+
+    const backToTheLobby = () => {
+        if (socket) {
+            socket.emit(SocketEvents.BACK_TO_THE_LOBBY, {
+                lobbyId: lobby?.id
+            });
+        }
     }
+
     return (
         <div className={style.container}>
             <GameEndBanner
@@ -202,6 +213,7 @@ const TicTacToe = () => {
                 state={gameWinStatus}
                 onClose={() => setShowEndBanner(false)}
                 restartGame={restartTTTGame}
+                backToTheLobby={backToTheLobby}
             />
             <div className={style.topContainer}>
                 <div className={`${style.topLeft} ${gameState.turnId === currentUser.id && myColor === "blue" ? style.activePanel : ""}`}>

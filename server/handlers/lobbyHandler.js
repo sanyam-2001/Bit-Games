@@ -8,6 +8,7 @@ import { v4 as uuid } from "uuid";
 import SocketPayload from "../Models/SocketPayload.model.js";
 import ChatMessage from "../Models/ChatMessage.model.js";
 
+
 const handleJoinLobby = async (io, socket, { name, lobbyId }) => {
     try {
         const lobby = await redisService.get(`LOBBY:${lobbyId}`);
@@ -103,9 +104,35 @@ const handleNavigateToGame = async (io, socket, { lobbyId, gameId }) => {
     }
 }
 
+const handleBackToTheLobby =  async (io, socket, { lobbyId }) => {
+    try{
+        const lobby = await redisService.get(`LOBBY:${lobbyId}`);
+        
+        if (!lobby) {
+            throw Error("Lobby not found");
+        }
+
+        lobby.gameId = GameId.NO_GAME;
+        lobby.activeGameInstanceId = null;  
+
+        const response = await redisService.set(`LOBBY:${lobbyId}`, lobby);
+
+        if (!response) {
+            throw Error("Lobby set method failed");
+        }
+
+        timelog(`Navigating to lobby in ${lobbyId}}` );
+        io.in(lobbyId).emit(events.NAVIGATE_TO_LOBBY, new SocketPayload(true, null,{ lobby }));
+    }
+    catch(error){
+        console.error(error);
+    }
+}
+
 export const registerLobbyHandlers = (io, socket) => {
     socket.on(events.JOIN_LOBBY, (data) => handleJoinLobby(io, socket, data));
     socket.on(events.CREATE_LOBBY, (data) => handleCreateLobby(io, socket, data));
     socket.on(events.TOGGLE_PLAYER_STATUS, (data) => handleTogglePlayerStatus(io, socket, data));
-    socket.on(events.NAVIGATE_TO_GAME, (data) => handleNavigateToGame(io, socket, data ))
+    socket.on(events.NAVIGATE_TO_GAME, (data) => handleNavigateToGame(io, socket, data ));
+    socket.on(events.BACK_TO_THE_LOBBY, (data) => handleBackToTheLobby(io, socket, data));
 };
