@@ -30,6 +30,19 @@ class LandGameState {
 
 
     }
+
+    getNextState = () => {
+        this.players.forEach((landPlayer) => {
+            landPlayer.updatePos();
+            this.board[landPlayer.posY][landPlayer.posX].interact(landPlayer.id, landPlayer.color);
+        });
+        return this;
+    }
+
+    registerMove = (action, playerId) => {
+        const index = this.players.findIndex((player) => player.id === playerId);
+        this.players[index].updateVelocity(action);
+    }
 }
 const LandCellStatus = {
     EMPTY: "EMPTY",
@@ -41,6 +54,16 @@ class LandCell {
         this.status = LandCellStatus.EMPTY;
         this.color = color[color.length - 1];
         this.interactingPlayerId = null;
+    }
+
+    interact = (playerId, color) => {
+        if (this.status === LandCellStatus.EMPTY) {
+            this.status = LandCellStatus.OWNED;//SEMI
+            this.color = color;
+            this.interactingPlayerId = playerId;
+            return;
+        }
+
     }
 }
 
@@ -55,6 +78,39 @@ class LandPlayer {
         this.velocityX = 0;
         this.velocityY = 0;
         this.playerAlive = true;
+        this.boardSize = boardSize;
+    }
+
+    updatePos = () => {
+        this.posX += this.velocityX;
+        if (this.posX < 0) this.posX = 0;
+        if (this.posX >= this.boardSize) this.posX = this.boardSize - 1;
+
+        this.posY += this.velocityY;
+        if (this.posY < 0) this.posY = 0;
+        if (this.posY >= this.boardSize) this.posY = this.boardSize - 1;
+    }
+    updateVelocity = (action) => {
+        if (action === "U") {
+            this.velocityX = 0;
+            this.velocityY = -1;
+        }
+        if (action === "D") {
+            this.velocityX = 0;
+            this.velocityY = 1;
+        }
+        if (action === "L") {
+            this.velocityX = -1;
+            this.velocityY = 0;
+        }
+        if (action === "R") {
+            this.velocityX = 1;
+            this.velocityY = 0;
+        }
+        if (action === "S") {
+            this.velocityX = 0;
+            this.velocityY = 0;
+        }
     }
 }
 

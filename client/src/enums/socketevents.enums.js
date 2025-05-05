@@ -38,7 +38,10 @@ const TicTacToeSocketEvents = {
 }
 const LandSocketEvents = {
     CREATE_GAME_4: "CREATE_GAME_4",
-    START_GAME_4: "START_GAME_4"
+    START_GAME_4: "START_GAME_4",
+    GAME_STATE_UPDATE_4: "GAME_STATE_UPDATE_4",
+    PLAYER_MOVE_4: "PLAYER_MOVE_4"
+
 }
 export const SocketEvents = {
     ...LobbySocketEvents,
