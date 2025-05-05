@@ -23,10 +23,10 @@ const TicTacToe = () => {
     const pinkPlayerName = lobby?.players?.find((el) => el.id === gameState?.pinkPlayer?.playerId)?.name;
 
     useEffect(() => {
-        if (socket && connected && lobby.admin === currentUser.id) {
+        if (socket && connected && lobby.admin === currentUser.id && gameState.turnId === "") {
             socket.emit(SocketEvents.CREATE_GAME_1, { lobbyId: lobby.id });
         }
-    }, [lobby, currentUser, socket, connected]);
+    }, [lobby, currentUser, socket, connected, gameState]);
 
     useEffect(() => {
         if (socket && connected)
@@ -43,6 +43,7 @@ const TicTacToe = () => {
             });
 
         socket.on(SocketEvents.TTT_GAME_UPDATE_1, ({ success, error, data }) => {
+            console.log(data)
             if (data?.gameState) {
                 setGameState(data?.gameState);
                 if (data?.isGameRestart) {
