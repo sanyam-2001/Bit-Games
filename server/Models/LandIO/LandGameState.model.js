@@ -2,7 +2,7 @@ import color from '../../static/Color.json' with { type: 'json' };
 
 class LandGameState {
     constructor(playerList) {
-        this.boardSize = 10;
+        this.boardSize = 100;
         this.board = getInitialLand(this.boardSize);
         this.players = playerList.map((player, index) => new LandPlayer(player, index, this.boardSize));
         this.time = 180;
@@ -58,7 +58,7 @@ class LandCell {
 
     interact = (playerId, color) => {
         if (this.status === LandCellStatus.EMPTY || this.status === LandCellStatus.OWNED) {
-            this.status = LandCellStatus.SEMI; //SEMI
+            this.status = this.interactingPlayerId === playerId ? LandCellStatus.OWNED : LandCellStatus.SEMI; //SEMI
             this.color = color;
             this.interactingPlayerId = playerId;
             return {

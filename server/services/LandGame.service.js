@@ -3,7 +3,7 @@ import SocketPayload from "../Models/SocketPayload.model.js";
 export class LandGameService {
     constructor() {
         this.activeGames = [];
-        this.GAME_TICK = 400;
+        this.GAME_TICK = 200;
     }
 
     addGame = (game) => {
