@@ -36,11 +36,16 @@ const TicTacToeSocketEvents = {
     TTT_GAME_OVER_1: "TTT_GAME_OVER_1",
     TTT_GAME_RESTART_1: "TTT_GAME_RESTART_1"
 }
+const LandSocketEvents = {
+    CREATE_GAME_4: "CREATE_GAME_4",
+    START_GAME_4: "START_GAME_4"
+}
 
 export const SocketEvents = {
     ...LobbySocketEvents,
     ...ChatSocketEvents,
     ...TicTacToeSocketEvents,
-    ...VoiceSocketEvents
+    ...VoiceSocketEvents,
+    ...LandSocketEvents
 };
 
