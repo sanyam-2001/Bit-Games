@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import styles from './LandIO.module.css';
 import { useGlobal } from '../../../context/GlobalContext';
 import { useSocket } from '../../../context/SocketContext';
@@ -9,6 +9,39 @@ const LandIO = () => {
     const { lobby, currentUser, setLobby } = useGlobal();
     const { socket, connected } = useSocket();
     const [gameState, setGameState] = useState(defaultLandIOState);
+
+    const handlePlayerMove = useCallback((action) => {
+        if (socket && lobby?.activeGameInstanceId) {
+            socket.emit(SocketEvents.PLAYER_MOVE_4, {
+                action,
+                lobbyId: lobby?.id,
+                playerId: currentUser?.id,
+                gameId: lobby.activeGameInstanceId
+            });
+        }
+    }, [socket, lobby, currentUser]);
+
+    const handleKeyDown = useCallback((e) => {
+        switch (e.key) {
+            case 'ArrowUp':
+                handlePlayerMove("U");
+                break;
+            case 'ArrowDown':
+                handlePlayerMove("D");
+                break;
+            case 'ArrowLeft':
+                handlePlayerMove("L");
+                break;
+            case 'ArrowRight':
+                handlePlayerMove("R");
+                break;
+            case ' ':
+                handlePlayerMove("S");
+                break;
+            default:
+                break;
+        }
+    }, [handlePlayerMove]);
 
     useEffect(() => {
         if (socket && connected && lobby.admin === currentUser.id) {
@@ -42,75 +75,47 @@ const LandIO = () => {
     }, [socket, connected, setLobby]);
 
     useEffect(() => {
-        const handleKeyDown = (e) => {
-            console.log(lobby)
-            if (socket && lobby?.activeGameInstanceId) {
-                console.log("KeyDown: ", e)
-                if (e.key === 'ArrowUp') {
-                    socket.emit(SocketEvents.PLAYER_MOVE_4, {
-                        action: "U",
-                        lobbyId: lobby?.id,
-                        playerId: currentUser?.id,
-                        gameId: lobby.activeGameInstanceId
-                    })
-                }
-                if (e.key === 'ArrowDown') {
-                    socket.emit(SocketEvents.PLAYER_MOVE_4, {
-                        action: "D",
-                        lobbyId: lobby?.id,
-                        playerId: currentUser?.id,
-                        gameId: lobby.activeGameInstanceId
-                    })
-                }
-                if (e.key === 'ArrowLeft') {
-                    socket.emit(SocketEvents.PLAYER_MOVE_4, {
-                        action: "L",
-                        lobbyId: lobby?.id,
-                        playerId: currentUser?.id,
-                        gameId: lobby.activeGameInstanceId
-                    })
-                }
-                if (e.key === 'ArrowRight') {
-                    socket.emit(SocketEvents.PLAYER_MOVE_4, {
-                        action: "R",
-                        lobbyId: lobby?.id,
-                        playerId: currentUser?.id,
-                        gameId: lobby?.activeGameInstanceId
-                    })
-                }
-                if (e.key === ' ') {
-                    socket.emit(SocketEvents.PLAYER_MOVE_4, {
-                        action: "S",
-                        lobbyId: lobby?.id,
-                        playerId: currentUser?.id,
-                        gameId: lobby?.activeGameInstanceId
-                    })
-                }
-            }
-        };
-
         window.addEventListener('keydown', handleKeyDown);
-
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
         };
-    }, [currentUser?.id, lobby?.id, socket, lobby]);
+    }, [handleKeyDown]);
+
+    const renderBoard = () => {
+        return (
+            <div className={styles.game}>
+                <div className={styles.board}>
+                    {gameState.board.map((row, rowIndex) => (
+                        <div key={rowIndex} className={styles.row}>
+                            {row.map((cell, colIndex) => {
+                                const cellClasses = [styles.cell];
+
+                                if (cell.state === 'EMPTY') {
+                                    cellClasses.push(styles.cellEmpty);
+                                } else if (cell.state === 'SEMI') {
+                                    cellClasses.push(styles.cellSemi);
+                                } else if (cell.state === 'OWNED') {
+                                    cellClasses.push(styles.cellOwned);
+                                }
+
+                                return (
+                                    <div
+                                        key={`${rowIndex}-${colIndex}`}
+                                        className={cellClasses.join(' ')}
+                                        style={{ backgroundColor: cell.color?.hex || '#444' }}
+                                    />
+                                );
+                            })}
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+    };
 
     return (
         <div className={styles.container}>
-            <div className={styles.game}>
-                {gameState.board.map((row, rowIndex) => (
-                    <div key={rowIndex} className={styles.row}>
-                        {row.map((cell, colIndex) => (
-                            <div
-                                key={`${rowIndex}-${colIndex}`}
-                                className={styles.cell}
-                                style={{ backgroundColor: cell.color.hex }}
-                            />
-                        ))}
-                    </div>
-                ))}
-            </div>
+            {renderBoard()}
             <div className={styles.stats}></div>
         </div>
     );

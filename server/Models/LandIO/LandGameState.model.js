@@ -57,11 +57,20 @@ class LandCell {
     }
 
     interact = (playerId, color) => {
-        if (this.status === LandCellStatus.EMPTY) {
-            this.status = LandCellStatus.OWNED;//SEMI
+        if (this.status === LandCellStatus.EMPTY || this.status === LandCellStatus.OWNED) {
+            this.status = LandCellStatus.SEMI; //SEMI
             this.color = color;
             this.interactingPlayerId = playerId;
-            return;
+            return {
+                collision: false
+            };
+        }
+
+        if (this.status === LandCellStatus.SEMI) {
+            return {
+                collision: true,
+                previousState: this,
+            };
         }
 
     }
