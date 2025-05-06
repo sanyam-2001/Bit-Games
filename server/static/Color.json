@@ -1,0 +1,12 @@
+[
+  { "id": 0, "name": "Red", "hex": "#F44336", "desc": "Player 1" },
+  { "id": 1, "name": "Blue", "hex": "#2196F3", "desc": "Player 2" },
+  { "id": 2, "name": "Green", "hex": "#4CAF50", "desc": "Player 3" },
+  { "id": 3, "name": "Yellow", "hex": "#FFC107", "desc": "Player 4" },
+  { "id": 4, "name": "Purple", "hex": "#9C27B0", "desc": "Player 5" },
+  { "id": 5, "name": "Cyan", "hex": "#00BCD4", "desc": "Player 6" },
+  { "id": 6, "name": "Orange", "hex": "#FF5722", "desc": "Player 7" },
+  { "id": 7, "name": "Gray", "hex": "#607D8B", "desc": "Player 8" },
+  { "id": 8, "name": "Indigo", "hex": "#3F51B5", "desc": "Player 9" },
+  { "id": 9, "name": "Brown", "hex": "#795548", "desc": "Earth" }
+]

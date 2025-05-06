@@ -1,5 +1,5 @@
 import React from 'react';
-import {useEffect } from "react";
+import { useEffect } from "react";
 import styles from './Game.module.css';
 import { Chat } from '../../components/ui';
 import { useGlobal } from '../../context/GlobalContext';
@@ -8,6 +8,7 @@ import TicTacToe from '../../components/Games/TicTacToe/TicTacToe';
 import { useSocket } from '../../context/SocketContext';
 import { SocketEvents } from '../../enums/socketevents.enums';
 import { showToast } from '../../utils/toast';
+import LandIO from '../../components/Games/LandIO/LandIO';
 
 // Placeholder components for other games
 // These should be replaced with actual game components when they are developed
@@ -37,8 +38,7 @@ const Game = () => {
             navigate('/home');
         }
 
-        if (socket)
-        {
+        if (socket) {
             socket.on(SocketEvents.NAVIGATE_TO_LOBBY, ({ success, error, data }) => {
                 setLobby(lobby);
                 navigate('/lobby');
@@ -49,24 +49,24 @@ const Game = () => {
                 setLobby(data?.lobby);
             });
 
-            socket.on(SocketEvents.PLAYER_DISCONNECTED, ({success, error, data}) => {
+            socket.on(SocketEvents.PLAYER_DISCONNECTED, ({ success, error, data }) => {
                 showToast.info(`${data?.disconnectedPlayer?.name} +  disconnected!`);
 
-                if (data.navigateToLobby){
+                if (data.navigateToLobby) {
                     navigate('/lobby');
                 }
             })
         }
-        
+
         return () => {
-            if (socket){
+            if (socket) {
                 socket.off(SocketEvents.NAVIGATE_TO_LOBBY);
                 socket.off(SocketEvents.PLAYER_DISCONNECTED);
                 socket.off(SocketEvents.LOBBY_UPDATED);
             }
         }
 
-    }, [lobby, navigate, socket]);
+    }, [lobby, navigate, socket, setLobby]);
 
     // Render the appropriate game component based on gameId in lobby
     const renderGame = () => {
@@ -81,6 +81,8 @@ const Game = () => {
                 return <Shazam />;
             case 3: // JKLM
                 return <JKLM />;
+            case 4:
+                return <LandIO />
             default:
                 const selectedGame = gameList.find(game => game.id === lobby.gameId);
                 return (
